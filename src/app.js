@@ -15,12 +15,13 @@ import userRoutes from './routes/user.routes'
 
 
 const app = express()
+const cors = require('cors');
 
 createRoles();
 
 app.set('pkg', pkg);
 
-
+app.use(cors()); // enable CORS for all routes
 
 //decirle a la app que use morgan cuando este en dev "modo desarrollo"
 app.use(morgan('dev'));
@@ -48,7 +49,7 @@ app.get('/', (req, res) => {
 });
 
 
-app.use('/api/products', productsRoutes)
+app.use('/api/products',productsRoutes)
 
 app.use('/api/auth', authRoutes)
 
