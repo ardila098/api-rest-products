@@ -1,17 +1,24 @@
 import Product from "../models/Product";
+const upload = require("../controllers/upload");
 
-export const createProducts = async (req, res) => {
-  // hago un destructuring para extraer el name , prince , category , img
+exports.createProduct = async (req, res) => {
+  const imgs = [];
 
-  const { name, category, price, description, stock, imgURL } = req.body;
+  req.files.forEach((file) => {
+    const url = file.path.replace(/\\/g, "/");
+
+    imgs.push({
+      url,
+    });
+  });
 
   const newProduct = new Product({
-    name,
-    category,
-    price,
-    description,
-    stock,
-    imgURL,
+    name: req.body.name,
+    price: req.body.price,
+    description: req.body.description,
+    stock: req.body.stock,
+    category: req.body.category,
+    imgs,
   });
 
   const productSaved = await newProduct.save();

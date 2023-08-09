@@ -1,3 +1,5 @@
+// upload.js
+
 const multer = require("multer");
 
 const storage = multer.diskStorage({
@@ -5,12 +7,22 @@ const storage = multer.diskStorage({
     cb(null, "uploads");
   },
   filename: function (req, file, cb) {
-    cb(null, `${Date.now()}-${file.originalname}`);
+   cb(null, `${Date.now()}-${file.originalname}`);
   },
 });
 
-const upload = multer({ storage: storage });
+const multerConfig = {
+  storage: storage,
+  limits: { fileSize: 1000000 }, // 1MB
+  fileFilter: (req, file, cb) => {
+    // filters
 
-const uploadMiddleware = upload.single("myFile");
+    cb(null, true);
+  }
+}
 
-module.exports = uploadMiddleware;
+const upload = multer(multerConfig);
+
+const uploadArray = upload.array("imgs");
+
+module.exports = uploadArray;

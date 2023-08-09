@@ -8,6 +8,7 @@ import * as productsCrtl from '../controllers/products.controller'
 //importamos los midelwares para la utenticacion de tokens
 
 import {authJwt} from '../middlewares'
+import uploadArray from "../controllers/upload";
 
 
 
@@ -15,7 +16,9 @@ import {authJwt} from '../middlewares'
 
 //pongo primero el verifytoken para verificarlo 
 
-router.post('/', productsCrtl.createProducts);
+// products.routes.js
+
+router.post('/', uploadArray, productsCrtl.createProduct);
 
 router.get('/', productsCrtl.getProducts);
 
