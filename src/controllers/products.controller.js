@@ -1,31 +1,52 @@
 import Product from "../models/Product";
-const upload = require("../controllers/upload");
+import sharp from "sharp";
+import fs from "fs";
+import path from "path";
 
 exports.createProduct = async (req, res) => {
   const imgs = [];
 
-  req.files.forEach((file) => {
+  // Loop through uploaded files
+  for (const file of req.files) {
     const url = file.path.replace(/\\/g, "/");
 
-    imgs.push({
-      url,
-    });
-  });
+    try {
+      // Apply sharpening using sharp library
+      const sharpenedBuffer = await sharp(file.path).sharpen().toBuffer();
+
+      const sharpenedUrl = `sharpened_${file.filename}`;
+      const savePath = path.join(__dirname, "path", "to", "save", sharpenedUrl);
+
+      // Create the directory if it doesn't exist
+      fs.mkdirSync(path.dirname(savePath), { recursive: true });
+
+      // Save the sharpened image to a new path
+      await sharp(sharpenedBuffer).toFile(savePath);
+
+      imgs.push({
+        url: sharpenedUrl,
+      });
+    } catch (error) {
+      console.error("Error processing image:", error);
+    }
+  }
 
   const newProduct = new Product({
     name: req.body.name,
     price: req.body.price,
     description: req.body.description,
-    stock: req.body.stock,
     category: req.body.category,
     imgs,
   });
 
-  const productSaved = await newProduct.save();
-
-  res.status(201).json(productSaved);
+  try {
+    const savedProduct = await newProduct.save();
+    res.status(201).json(savedProduct);
+  } catch (error) {
+    console.error("Error saving product:", error);
+    res.status(500).json({ error: "Error creating product" });
+  }
 };
-
 export const getProducts = async (req, res) => {
   //a travez del metodo find me busca todos los productos
   console.log("oeee");
