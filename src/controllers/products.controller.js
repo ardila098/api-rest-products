@@ -4,6 +4,11 @@ import fs from "fs";
 import path from "path";
 
 exports.createProduct = async (req, res) => {
+  console.log(req.body);
+
+  console.log(req.method); // POST, GET, etc
+  console.log(req.path); // endpoint llamado
+
   const imgs = [];
 
   // Loop through uploaded files
@@ -14,7 +19,7 @@ exports.createProduct = async (req, res) => {
       // Apply sharpening using sharp library
       const sharpenedBuffer = await sharp(file.path).sharpen().toBuffer();
 
-      const sharpenedUrl = `sharpened_${file.filename}`;
+      const sharpenedUrl = `${file.filename}`;
       const savePath = path.join(__dirname, "path", "to", "save", sharpenedUrl);
 
       // Create the directory if it doesn't exist
@@ -23,8 +28,10 @@ exports.createProduct = async (req, res) => {
       // Save the sharpened image to a new path
       await sharp(sharpenedBuffer).toFile(savePath);
 
+      const IMAGE_PATH = "http://localhost:3000/uploads/";
+
       imgs.push({
-        url: sharpenedUrl,
+        url: IMAGE_PATH + sharpenedUrl,
       });
     } catch (error) {
       console.error("Error processing image:", error);
