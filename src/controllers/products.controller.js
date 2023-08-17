@@ -80,8 +80,21 @@ export const updateProductById = async (req, res) => {
   res.status(200).json(updatedProduct);
 };
 
-export const deleteProductById = async (req, res) => {
-  const { productId } = req.params;
-  await Product.findByIdAndDelete(productId);
-  res.status(204).json();
+export const deleteProduct = async (req, res) => {
+  console.log(req.params);
+  try {
+    const product = await Product.findById(req.params.productId);
+
+    // Eliminar las imágenes
+    product.imgs.forEach((img) => {
+      const filePath = img.url.replace(/^.*[\\\/]/, ""); // extraer nombre de archivo
+      fs.unlinkSync(`uploads/${filePath}`); // eliminar archivo
+    });
+
+    await product.remove();
+    res.json({ message: "Product deleted" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
 };

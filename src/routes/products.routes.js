@@ -26,6 +26,6 @@ router.get('/:productId', productsCrtl.getProductById);
 
 router.put('/:productId',productsCrtl.updateProductById);
 
-router.delete('/:productId', productsCrtl.deleteProductById);
+router.delete('/:productId', productsCrtl.deleteProduct);
 
 export default router;
