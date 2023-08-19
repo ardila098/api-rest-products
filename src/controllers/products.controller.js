@@ -81,14 +81,16 @@ export const updateProductById = async (req, res) => {
 };
 
 export const deleteProduct = async (req, res) => {
-  console.log(req.params);
   try {
     const product = await Product.findById(req.params.productId);
 
-    // Eliminar las imágenes
-    product.imgs.forEach((img) => {
-      const filePath = img.url.replace(/^.*[\\\/]/, ""); // extraer nombre de archivo
-      fs.unlinkSync(`uploads/${filePath}`); // eliminar archivo
+    product.imgs.forEach(async (img) => {
+      try {
+        const filePath = img.url.replace(/^.*[\\\/]/, ""); // extraer nombre de archivo
+        fs.unlinkSync(`uploads/${filePath}`); // eliminar archivo
+      } catch (err) {
+        console.error("Error deleting image ", err);
+      }
     });
 
     await product.remove();
