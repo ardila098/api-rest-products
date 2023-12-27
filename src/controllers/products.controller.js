@@ -4,10 +4,10 @@ import fs from "fs";
 import path from "path";
 
 exports.createProduct = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
 
-  console.log(req.method); // POST, GET, etc
-  console.log(req.path); // endpoint llamado
+  // console.log(req.method); // POST, GET, etc
+  // console.log(req.path); // endpoint llamado
 
   const imgs = [];
 
@@ -22,7 +22,7 @@ exports.createProduct = async (req, res) => {
       const sharpenedUrl = `${file.filename}`;
       const savePath = path.join(__dirname, "path", "to", "save", sharpenedUrl);
 
-      // Create the directory if it doesn't exist
+      // Crear directorio si no existe
       fs.mkdirSync(path.dirname(savePath), { recursive: true });
 
       // Save the sharpened image to a new path
@@ -43,6 +43,7 @@ exports.createProduct = async (req, res) => {
     price: req.body.price,
     description: req.body.description,
     category: req.body.category,
+    stock:req.body.stock,
     imgs,
   });
 
@@ -68,16 +69,18 @@ export const getProductById = async (req, res) => {
 };
 
 export const updateProductById = async (req, res) => {
-  const updatedProduct = await Product.findByIdAndUpdate(
-    req.params.productId,
-    req.body,
-    {
-      new: true,
-    }
-  );
+  console.log(req.body);
 
-  console.log(updateProductById);
-  res.status(200).json(updatedProduct);
+  // const updatedProduct = await Product.findByIdAndUpdate(
+  //   req.params.productId,
+  //   req.body,
+  //   {
+  //     new: true,
+  //   }
+  // );
+
+  // console.log(updateProductById);
+  // res.status(200).json(updatedProduct);
 };
 
 export const deleteProduct = async (req, res) => {
@@ -86,8 +89,8 @@ export const deleteProduct = async (req, res) => {
 
     product.imgs.forEach(async (img) => {
       try {
-        const filePath = img.url.replace(/^.*[\\\/]/, ""); // extraer nombre de archivo
-        fs.unlinkSync(`uploads/${filePath}`); // eliminar archivo
+        const filePath = img.url.replace(/^.*[\\\/]/, ""); // extrae nombre de archivo
+        fs.unlinkSync(`uploads/${filePath}`); // elimina archivo
       } catch (err) {
         console.error("Error deleting image ", err);
       }
