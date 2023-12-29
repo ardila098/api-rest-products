@@ -4,11 +4,11 @@ import pkg from "../package.json";
 
 import { createRoles } from "./libs/initialSetup";
 import productsRoutes from "./routes/products.routes";
+import slidersRoutes from "./routes/sliders.routes";
+
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
 import uploadArray from "./controllers/upload";
-
-
 
 const app = express();
 const cors = require("cors");
@@ -20,8 +20,6 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 
-
-
 app.get("/", (req, res) => {
   res.json({
     name: app.get("pkg").name,
@@ -29,13 +27,12 @@ app.get("/", (req, res) => {
   });
 });
 
-
-
-app.use('/uploads', express.static('uploads'));
+app.use("/uploads", express.static("uploads"));
 
 app.use("/api/products", productsRoutes);
 
 app.use("/api/auth", authRoutes);
+app.use("/api/sliders", slidersRoutes);
 
 app.use("/api/users", userRoutes);
 
