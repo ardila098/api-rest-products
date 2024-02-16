@@ -43,7 +43,7 @@ exports.createProduct = async (req, res) => {
     price: req.body.price,
     description: req.body.description,
     category: req.body.category,
-    stock:req.body.stock,
+    stock: req.body.stock,
     imgs,
   });
 
@@ -55,6 +55,7 @@ exports.createProduct = async (req, res) => {
     res.status(500).json({ error: "Error creating product" });
   }
 };
+
 export const getProducts = async (req, res) => {
   //a travez del metodo find me busca todos los productos
   console.log("oeee");
@@ -67,20 +68,69 @@ export const getProductById = async (req, res) => {
   const product = await Product.findById(req.params.productId);
   res.status(200).json(product);
 };
-
 export const updateProductById = async (req, res) => {
   console.log(req.body);
 
-  // const updatedProduct = await Product.findByIdAndUpdate(
-  //   req.params.productId,
-  //   req.body,
-  //   {
-  //     new: true,
-  //   }
-  // );
+  const imgs = [];
 
-  // console.log(updateProductById);
-  // res.status(200).json(updatedProduct);
+  // Check if files are present in the request
+  if (req.files && req.files.length > 0) {
+    // Loop through uploaded files
+    for (const file of req.files) {
+      const url = file.path.replace(/\\/g, "/");
+
+      try {
+        // Apply sharpening using sharp library
+        const sharpenedBuffer = await sharp(file.path).sharpen().toBuffer();
+
+        const sharpenedUrl = `${file.filename}`;
+        const savePath = path.join(
+          __dirname,
+          "path",
+          "to",
+          "save",
+          sharpenedUrl
+        );
+
+        // Create directory if it doesn't exist
+        fs.mkdirSync(path.dirname(savePath), { recursive: true });
+
+        // Save the sharpened image to a new path
+        await sharp(sharpenedBuffer).toFile(savePath);
+
+        const IMAGE_PATH = "http://localhost:3000/uploads/";
+
+        imgs.push({
+          url: IMAGE_PATH + sharpenedUrl,
+        });
+      } catch (error) {
+        console.error("Error processing image:", error);
+      }
+    }
+  } else {
+    console.log("No files uploaded with the request.");
+  }
+
+  try {
+    const productId = req.params.productId; // Corrected
+    const update = {
+      name: req.body.name,
+      price: req.body.price,
+      description: req.body.description,
+      category: req.body.category,
+      stock: req.body.stock,
+      imgs,
+    };
+
+    const updatedProduct = await Product.findByIdAndUpdate(productId, update, {
+      new: true,
+    });
+
+    res.status(200).json(updatedProduct);
+  } catch (error) {
+    console.error("Error updating product:", error);
+    res.status(500).json({ error: "Error updating product" });
+  }
 };
 
 export const deleteProduct = async (req, res) => {

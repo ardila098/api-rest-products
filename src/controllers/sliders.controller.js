@@ -4,7 +4,6 @@ import fs from "fs";
 import path from "path";
 
 exports.createSlider = async (req, res) => {
-
   const imgs = [];
 
   // Loop through uploaded files
@@ -43,7 +42,7 @@ exports.createSlider = async (req, res) => {
       nameItem: item.nameItem,
       description: item.description,
       category: item.category,
-      imgs
+      imgs,
     })),
   });
 
@@ -87,8 +86,8 @@ export const updateSliderById = async (req, res) => {
 export const deleteSlider = async (req, res) => {
   try {
     const slider = await Slider.findById(req.params.sliderId);
-
-    slider.imgs.forEach(async (img) => {
+    console.log(slider);
+    slider?.items?.imgs?.forEach(async (img) => {
       try {
         const filePath = img.url.replace(/^.*[\\\/]/, ""); // extrae nombre de archivo
         fs.unlinkSync(`uploads/${filePath}`); // elimina archivo
