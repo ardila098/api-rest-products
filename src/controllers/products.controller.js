@@ -6,6 +6,7 @@ import path from "path";
 exports.createProduct = async (req, res) => {
   console.log(req.body.imgs);
 
+  console.log("files", req.files);
   // console.log(req.method); // POST, GET, etc
   // console.log(req.path); // endpoint llamado
 
@@ -68,70 +69,61 @@ export const getProductById = async (req, res) => {
   const product = await Product.findById(req.params.productId);
   res.status(200).json(product);
 };
+
 export const updateProductById = async (req, res) => {
   console.log(req.body);
+  console.log("files", req.files);
 
   const imgs = [];
 
-  // Check if files are present in the request
-  if (req.files && req.files.length > 0) {
-    // Loop through uploaded files
-    for (const file of req.files) {
-      const url = file.path.replace(/\\/g, "/");
-
-      try {
-        // Apply sharpening using sharp library
-        const sharpenedBuffer = await sharp(file.path).sharpen().toBuffer();
-
-        const sharpenedUrl = `${file.filename}`;
-        const savePath = path.join(
-          __dirname,
-          "path",
-          "to",
-          "save",
-          sharpenedUrl
-        );
-
-        // Create directory if it doesn't exist
-        fs.mkdirSync(path.dirname(savePath), { recursive: true });
-
-        // Save the sharpened image to a new path
-        await sharp(sharpenedBuffer).toFile(savePath);
-
-        const IMAGE_PATH = "http://localhost:3000/uploads/";
-
-        imgs.push({
-          url: IMAGE_PATH + sharpenedUrl,
-        });
-      } catch (error) {
-        console.error("Error processing image:", error);
-      }
+  for (const file of req.files) {
+    const url = file.path.replace(/\\/g, "/");
+    try {
+     
+      const sharpenedBuffer = await sharp(file.path).sharpen().toBuffer();
+      const sharpenedUrl = `${file.filename}`;
+      const savePath = path.join(__dirname, "path", "to", "save", sharpenedUrl);
+     
+      fs.mkdirSync(path.dirname(savePath), { recursive: true });
+   
+      await sharp(sharpenedBuffer).toFile(savePath);
+      const IMAGE_PATH = "http://localhost:3000/uploads/";
+      imgs.push({
+        url: IMAGE_PATH + sharpenedUrl,
+      });
+    } catch (error) {
+      console.error("Error processing image:", error);
     }
-  } else {
-    console.log("No files uploaded with the request.");
   }
 
+  const id = req.params.productId; 
+
   try {
-    const productId = req.params.productId; // Corrected
-    const update = {
-      name: req.body.name,
-      price: req.body.price,
-      description: req.body.description,
-      category: req.body.category,
-      stock: req.body.stock,
-      imgs,
-    };
+ 
+    const existingProduct = await Product.findById(id);
+    if (!existingProduct) {
+      return res.status(404).json({ error: "Product not found" });
+    }
 
-    const updatedProduct = await Product.findByIdAndUpdate(productId, update, {
-      new: true,
-    });
+    // Update product properties except imgs
+    existingProduct.name = req.body.name;
+    existingProduct.price = req.body.price;
+    existingProduct.description = req.body.description;
+    existingProduct.category = req.body.category;
+    existingProduct.stock = req.body.stock;
 
-    res.status(200).json(updatedProduct);
+    // Add new images to existing ones
+    existingProduct.imgs = existingProduct.imgs.concat(imgs);
+
+    // Save the updated product
+    const savedProduct = await existingProduct.save();
+    res.status(200).json(savedProduct);
   } catch (error) {
     console.error("Error updating product:", error);
     res.status(500).json({ error: "Error updating product" });
   }
 };
+
 
 export const deleteProduct = async (req, res) => {
   try {
