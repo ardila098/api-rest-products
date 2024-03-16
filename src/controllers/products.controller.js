@@ -71,59 +71,56 @@ export const getProductById = async (req, res) => {
 };
 
 export const updateProductById = async (req, res) => {
-  console.log(req.body);
-  console.log("files", req.files);
-
-  const imgs = [];
-
-  for (const file of req.files) {
-    const url = file.path.replace(/\\/g, "/");
-    try {
-     
-      const sharpenedBuffer = await sharp(file.path).sharpen().toBuffer();
-      const sharpenedUrl = `${file.filename}`;
-      const savePath = path.join(__dirname, "path", "to", "save", sharpenedUrl);
-     
-      fs.mkdirSync(path.dirname(savePath), { recursive: true });
-   
-      await sharp(sharpenedBuffer).toFile(savePath);
-      const IMAGE_PATH = "http://localhost:3000/uploads/";
-      imgs.push({
-        url: IMAGE_PATH + sharpenedUrl,
-      });
-    } catch (error) {
-      console.error("Error processing image:", error);
-    }
-  }
-
-  const id = req.params.productId; 
-
-  try {
+  const id = req.params.productId;
+  const existingProduct = await Product.findById(id);
  
-    const existingProduct = await Product.findById(id);
-    if (!existingProduct) {
-      return res.status(404).json({ error: "Product not found" });
-    }
-
-    // Update product properties except imgs
-    existingProduct.name = req.body.name;
-    existingProduct.price = req.body.price;
-    existingProduct.description = req.body.description;
-    existingProduct.category = req.body.category;
-    existingProduct.stock = req.body.stock;
-
-    // Add new images to existing ones
-    existingProduct.imgs = existingProduct.imgs.concat(imgs);
-
-    // Save the updated product
-    const savedProduct = await existingProduct.save();
-    res.status(200).json(savedProduct);
-  } catch (error) {
-    console.error("Error updating product:", error);
-    res.status(500).json({ error: "Error updating product" });
+  if (!existingProduct) {
+     return res.status(404).json({ error: "Product not found" });
   }
-};
-
+ 
+  // Actualizar propiedades del producto
+  existingProduct.name = req.body.name;
+  existingProduct.price = req.body.price;
+  existingProduct.description = req.body.description;
+  existingProduct.category = req.body.category;
+  existingProduct.stock = req.body.stock;
+ 
+  // Procesar imágenes nuevas
+  const newImgs = [];
+  for (const file of req.files) {
+     const url = file.path.replace(/\\/g, "/");
+     try {
+       const sharpenedBuffer = await sharp(file.path).sharpen().toBuffer();
+       const sharpenedUrl = `${file.filename}`;
+       const savePath = path.join(__dirname, "path", "to", "save", sharpenedUrl);
+       fs.mkdirSync(path.dirname(savePath), { recursive: true });
+       await sharp(sharpenedBuffer).toFile(savePath);
+       const IMAGE_PATH = "http://localhost:3000/uploads/";
+       newImgs.push({
+         url: IMAGE_PATH + sharpenedUrl,
+       });
+     } catch (error) {
+       console.error("Error processing image:", error);
+     }
+  }
+ 
+  // Procesar imágenes existentes
+  const existingImgs = req.body.existingImgs || [];
+  // Convertir los _id de las imágenes existentes a strings
+  const existingImgsIds = existingProduct.imgs.map(img => img._id.toString());
+  // Filtrar las imágenes existentes que coinciden con existingImgs
+  const updatedImgs = existingProduct.imgs.filter((img, index) =>
+     existingImgs.includes(existingImgsIds[index])
+  );
+ 
+  // Combinar imágenes nuevas y existentes
+  existingProduct.imgs = [...updatedImgs, ...newImgs];
+ 
+  // Guardar el producto actualizado
+  const savedProduct = await existingProduct.save();
+  res.status(200).json(savedProduct);
+ };
+ 
 
 export const deleteProduct = async (req, res) => {
   try {
