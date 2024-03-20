@@ -8,7 +8,12 @@ import { stringify } from "querystring";
 const productSchema = new Schema(
   {
     name: String,
-    category: String,
+    category: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Category",
+      },
+    ],
     price: Number,
     description: String,
     stock: Number,
@@ -21,6 +26,12 @@ const productSchema = new Schema(
         url: String,
       },
     ],
+    // sizes: [
+    //   {
+    //     type: Schema.Types.ObjectId,
+    //     ref: "Sizes",
+    //   },
+    // ],
   },
   {
     timestamps: true,
