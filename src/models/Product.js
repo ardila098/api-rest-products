@@ -26,12 +26,12 @@ const productSchema = new Schema(
         url: String,
       },
     ],
-    // sizes: [
-    //   {
-    //     type: Schema.Types.ObjectId,
-    //     ref: "Sizes",
-    //   },
-    // ],
+    garmentType: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "GarmentType",
+      },
+    ],
   },
   {
     timestamps: true,

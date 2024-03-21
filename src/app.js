@@ -9,7 +9,7 @@ import slidersRoutes from "./routes/sliders.routes";
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
 import categoryRoutes from "./routes/category.routes";
-
+import garmentTypeRoutes from "./routes/garmentType.routes";
 import uploadArray from "./controllers/upload";
 
 const app = express();
@@ -35,10 +35,9 @@ app.use("/api/products", productsRoutes);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/sliders", slidersRoutes);
-
+app.use("/api/garmentType", garmentTypeRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/categorys", categoryRoutes);
-
 app.use("/api/uploads", uploadArray);
 
 export default app;
