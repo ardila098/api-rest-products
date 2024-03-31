@@ -5,14 +5,13 @@ import fs from "fs";
 import path from "path";
 
 exports.createProduct = async (req, res) => {
-  console.log(req.body.category);
+  console.log(req.body);
 
   console.log("files", req.files);
   // console.log(req.method); // POST, GET, etc
   // console.log(req.path); // endpoint llamado
 
   const categoryArray = req.body.category.split(",");
-
   const categoryIds = categoryArray.map((id) => mongoose.Types.ObjectId(id));
   const imgs = [];
 
@@ -43,12 +42,16 @@ exports.createProduct = async (req, res) => {
     }
   }
 
+  const pieces = JSON.parse(req.body.pieces);
+
   const newProduct = new Product({
     name: req.body.name,
     price: req.body.price,
     description: req.body.description,
     category: categoryIds,
+    garmentType: req.body.garmentType,
     stock: req.body.stock,
+    pieces: pieces,
     imgs,
   });
 
@@ -84,6 +87,7 @@ export const updateProductById = async (req, res) => {
   const categoryArray = req.body.category.split(",");
 
   const categoryIds = categoryArray.map((id) => mongoose.Types.ObjectId(id));
+  const pieces = JSON.parse(req.body.pieces);
 
   if (!existingProduct) {
     return res.status(404).json({ error: "Product not found" });
@@ -95,6 +99,8 @@ export const updateProductById = async (req, res) => {
   existingProduct.description = req.body.description;
   existingProduct.category = categoryIds;
   existingProduct.stock = req.body.stock;
+  existingProduct.garmentType = req.body.garmentType;
+  existingProduct.pieces = pieces;
 
   // Procesar imágenes nuevas
   const newImgs = [];

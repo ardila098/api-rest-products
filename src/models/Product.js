@@ -32,7 +32,21 @@ const productSchema = new Schema(
         ref: "GarmentType",
       },
     ],
+    pieces: [
+      {
+        piece: String,
+        sizes: [
+          {
+            name: String,
+            inventory: Number,
+            _id: String,
+          },
+        ],
+        _id: String,
+      },
+    ],
   },
+
   {
     timestamps: true,
     versionKey: false,
