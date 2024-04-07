@@ -9,7 +9,7 @@ export const createCategory = async (req, res) => {
     const savedCategory = await newCategory.save();
     res.status(201).json(savedCategory);
   } catch (error) {
-    console.error("Error saving slider:", error);
+    console.error("Error saving category:", error);
     res.status(500).json({ error: "Error creating category" });
   }
 };
@@ -34,7 +34,7 @@ export const deleteCategory = async (req, res) => {
     console.log(category);
 
     await category.remove();
-    res.json({ message: "Slider deleted" });
+    res.json({ message: "category deleted" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });

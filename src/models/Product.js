@@ -14,6 +14,11 @@ const productSchema = new Schema(
         ref: "Category",
       },
     ],
+    reference: {
+      type: Schema.Types.ObjectId,
+      ref: "Reference",
+    },
+
     price: Number,
     description: String,
     stock: Number,

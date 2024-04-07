@@ -51,6 +51,7 @@ exports.createProduct = async (req, res) => {
     category: categoryIds,
     garmentType: req.body.garmentType,
     stock: req.body.stock,
+    reference: req.body.reference,
     pieces: pieces,
     imgs,
   });
@@ -101,6 +102,7 @@ export const updateProductById = async (req, res) => {
   existingProduct.stock = req.body.stock;
   existingProduct.garmentType = req.body.garmentType;
   existingProduct.pieces = pieces;
+  existingProduct.reference = req.body.reference;
 
   // Procesar imágenes nuevas
   const newImgs = [];
