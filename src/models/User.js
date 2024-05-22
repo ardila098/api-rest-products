@@ -3,7 +3,6 @@
 import bcrypt from "bcryptjs/dist/bcrypt";
 import { Schema, model } from "mongoose";
 
-// creaos un modelo de datos para los usuarios
 
 const userSchema = new Schema({
 
