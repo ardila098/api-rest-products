@@ -6,7 +6,7 @@ import mongoose  from "mongoose"
 
 
 
-mongoose.connect("mongodb://Localhost/companydb",{
+mongoose.connect("mongodb://Localhost/insurancedb",{
     useNewUrlParser: true,
     useUniFiedTopology: true,
     

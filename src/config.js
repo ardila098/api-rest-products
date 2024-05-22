@@ -2,5 +2,5 @@
 
 export default {
 
-    SECRET: 'products-api'
+    SECRET: 'insurances-api'
 }
