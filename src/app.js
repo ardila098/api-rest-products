@@ -1,7 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import pkg from "../package.json";
-
+import paymentRoutes from "./routes/payment.routes.js"
 import { createRoles } from "./libs/initialSetup";
 import productsRoutes from "./routes/products.routes";
 import slidersRoutes from "./routes/sliders.routes";
@@ -41,5 +41,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/categorys", categoryRoutes);
 app.use("/api/references", referenceRoutes);
 app.use("/api/uploads", uploadArray);
+app.use(paymentRoutes)
+
 
 export default app;
