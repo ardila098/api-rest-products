@@ -1,6 +1,7 @@
 import mercadopago from "mercadopago";
+import Order from "../../models/orders/Orders";
 
-export const createOrder = async (req, res) => {
+export const proccesPayment = async (req, res) => {
   mercadopago.configure({
     access_token:
       "TEST-4404056600548652-042312-5bb1ea0b814a7950dbe2fe78663adc28-1781427063",
@@ -35,9 +36,10 @@ export const createOrder = async (req, res) => {
     },
     notification_url: "https://0b40-190-158-28-71.ngrok-free.app/webhook",
   });
+
   res.status(201).json(result.body);
-  res.send(result.body)
-  // console.log(result);
+  res.send(result.body);
+  console.log(result);
 };
 
 export const reciveWeboHook = async (req, res) => {
@@ -52,5 +54,21 @@ export const reciveWeboHook = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.sendStatus(500).json({ error: error.message });
+  }
+};
+
+
+
+export const createOrders = async (req, res) => {
+  console.log(req.body);
+
+  const newOrder = new Order(req.body);
+
+  try {
+    const savedOrder = await newOrder.save();
+    res.status(201).json(savedOrder);
+  } catch (error) {
+    console.error("Error saving order:", error);
+    res.status(500).json({ error: "Error creating order" });
   }
 };

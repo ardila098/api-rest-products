@@ -3,7 +3,7 @@ const router = express.Router();
 
 import * as paymentsCrtl from "../controllers/paymentsController/paymentsController";
 
-router.post("/create-order", paymentsCrtl.createOrder);
+// router.post("/payment", paymentsCrtl.createOrder);
 
 router.get("/success", (req, res) => res.send("send"));
 
