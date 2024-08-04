@@ -13,13 +13,21 @@ import referenceRoutes from "./routes/references.routes";
 import garmentTypeRoutes from "./routes/garmentType.routes";
 import uploadArray from "./controllers/upload";
 
+
 const app = express();
 const cors = require("cors");
+const cookieParser = require('cookie-parser');
+
+
 
 createRoles();
 
 app.set("pkg", pkg);
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3001', // Reemplaza con la URL de tu cliente React
+  credentials: true, // Esto es necesario para permitir las cookies
+}));
+app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(express.json());
 
