@@ -16,7 +16,7 @@ import uploadArray from "./controllers/upload";
 
 const app = express();
 const cors = require("cors");
-const cookieParser = require('cookie-parser');
+// const cookieParser = require('cookie-parser');
 
 
 
@@ -27,7 +27,7 @@ app.use(cors({
   origin: 'http://localhost:3001', // Reemplaza con la URL de tu cliente React
   credentials: true, // Esto es necesario para permitir las cookies
 }));
-app.use(cookieParser());
+// app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(express.json());
 

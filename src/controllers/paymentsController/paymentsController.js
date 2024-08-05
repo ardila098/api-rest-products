@@ -1,5 +1,6 @@
 import mercadopago from "mercadopago";
 import Order from "../../models/orders/Orders";
+import { sentEmails } from "../sentEmails.controller";
 
 export const proccesPayment = async (req, res) => {
   console.log(req.body);
@@ -10,24 +11,6 @@ export const proccesPayment = async (req, res) => {
   });
   const result = await mercadopago.preferences.create({
     items: req.body.items,
-    // items: [
-    //   {
-    //     title: "tv",
-    //     unit_price: 600000,
-    //     off: 10,
-    //     description: "",
-    //     currency_id: "COP",
-    //     quantity: 1,
-    //   },
-    //   {
-    //     title: "Laptop",
-    //     unit_price: 500000,
-    //     description: "",
-    //     off: 10,
-    //     currency_id: "COP",
-    //     quantity: 1,
-    //   },
-    // ],
 
     payer: {
       email: "ardilajr@gmail.com",
@@ -67,14 +50,25 @@ export const reciveWebhook = async (req, res) => {
 
       console.log("Order found:", order);
 
+      const dataEmail = {
+        email: "",
+        description: "",
+      };
+
       if (statusPayment === "approved") {
         order.paymentStatus = 2;
+        dataEmail.email = order.email;
+        dataEmail.description = "Compra realizada con exito";
       } else if (statusPayment === "rejected") {
         order.paymentStatus = 3;
+        dataEmail.email = order.email;
+        dataEmail.description = "Tu Pago genero error";
       }
 
       const updatedOrder = await order.save();
       console.log("Order updated:", updatedOrder);
+
+      sentEmails(dataEmail);
 
       return res.status(201).json(updatedOrder);
     }
