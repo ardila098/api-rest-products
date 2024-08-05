@@ -25,6 +25,9 @@ const orderSchema = new Schema(
     city: { type: String, required: false },
     address: { type: String, required: false },
     district: { type: String, required: false },
+    paymentId: { type: String, required: false },
+    client_id: { type: String, required: false },
+    collector_id: { type: String, required: false },
     terms: { type: Boolean, required: true },
     items: [
       {

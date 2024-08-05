@@ -11,6 +11,6 @@ router.get("/failure", (req, res) => res.send("failure"));
 
 router.get("/pending", (req, res) => res.send("pending"));
 
-router.post("/webhook", paymentsCrtl.reciveWeboHook);
+router.post("/webhook", paymentsCrtl.reciveWebhook);
 
 export default router;
