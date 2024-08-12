@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 import sharp from "sharp";
 import fs from "fs";
 import path from "path";
+import Categorys from "../models/modelsProduct/Categorys";
+import reference from "../models/modelsProduct/reference";
 
 exports.createProduct = async (req, res) => {
   console.log(req.body);
@@ -67,8 +69,29 @@ exports.createProduct = async (req, res) => {
 
 export const getProducts = async (req, res) => {
   try {
-    //populate para reemplazar los IDs de categoría con los documentos completos de las categorías
-    const products = await Product.find().populate("category");
+    const searchTerm = req.query.search;
+    let products;
+
+    if (!searchTerm || searchTerm.trim() === "") {
+      products = await Product.find({});
+    } else {
+      const regex = new RegExp(searchTerm, "i"); 
+
+      const [categoryIds, referenceIds] = await Promise.all([
+        Categorys.find({ name: { $regex: regex } }).distinct("_id"),
+        reference.find({ name: { $regex: regex } }).distinct("_id"),
+      ]);
+
+      products = await Product.find({
+        $or: [
+          { name: { $regex: regex } },
+          { description: { $regex: regex } },
+          { category: { $in: categoryIds } },
+          { reference: { $in: referenceIds } },
+        ],
+      });
+    }
+
     res.json(products);
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -104,7 +127,6 @@ export const updateProductById = async (req, res) => {
   existingProduct.pieces = pieces;
   existingProduct.reference = req.body.reference;
 
-  // Procesar imágenes nuevas
   const newImgs = [];
   for (const file of req.files) {
     const url = file.path.replace(/\\/g, "/");
@@ -123,19 +145,14 @@ export const updateProductById = async (req, res) => {
     }
   }
 
-  // Procesar imágenes existentes
   const existingImgs = req.body.existingImgs || [];
-  // Convertir los _id de las imágenes existentes a strings
   const existingImgsIds = existingProduct.imgs.map((img) => img._id.toString());
-  // Filtrar las imágenes existentes que coinciden con existingImgs
   const updatedImgs = existingProduct.imgs.filter((img, index) =>
     existingImgs.includes(existingImgsIds[index])
   );
 
-  // Combinar imágenes nuevas y existentes
   existingProduct.imgs = [...updatedImgs, ...newImgs];
 
-  // Guardar el producto actualizado
   const savedProduct = await existingProduct.save();
   res.status(200).json(savedProduct);
 };
@@ -146,7 +163,7 @@ export const deleteProduct = async (req, res) => {
 
     product.imgs.forEach(async (img) => {
       try {
-        const filePath = img.url.replace(/^.*[\\\/]/, ""); // extrae nombre de archivo
+        const filePath = img.url.replace(/^.*[\\\/]/, ""); 
         fs.unlinkSync(`uploads/${filePath}`); // elimina archivo
       } catch (err) {
         console.error("Error deleting image ", err);

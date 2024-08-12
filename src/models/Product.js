@@ -1,12 +1,8 @@
-import { timeStamp } from "console";
 import { Schema, model } from "mongoose";
-import { stringify } from "querystring";
-
-
 
 const productSchema = new Schema(
   {
-    name: String,
+    name: { type: String, index: true },
     category: [
       {
         type: Schema.Types.ObjectId,
@@ -17,9 +13,8 @@ const productSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Reference",
     },
-
-    price: Number,
-    description: String,
+    price: { type: Number, index: true },
+    description: { type: String, index: true },
     stock: Number,
     imgs: [
       {
@@ -43,20 +38,28 @@ const productSchema = new Schema(
           {
             name: String,
             inventory: Number,
-            _id: String,
+            _id: {
+              type: Schema.Types.ObjectId,
+              auto: true,
+            },
           },
         ],
-        _id: String,
+        _id: {
+          type: Schema.Types.ObjectId,
+          auto: true,
+        },
       },
     ],
   },
-
   {
     timestamps: true,
     versionKey: false,
   }
 );
 
-
+productSchema.index({
+  name: "text",
+  description: "text",
+});
 
 export default model("Product", productSchema);
