@@ -3,8 +3,7 @@ const mongoose = require("mongoose");
 import sharp from "sharp";
 import fs from "fs";
 import path from "path";
-import Categorys from "../models/modelsProduct/Categorys";
-import reference from "../models/modelsProduct/reference";
+
 
 exports.createProduct = async (req, res) => {
   console.log(req.body);
@@ -68,34 +67,32 @@ exports.createProduct = async (req, res) => {
 };
 
 export const getProducts = async (req, res) => {
+  const { search, category, reference, color } = req.query;
+
+  const filters = {}; 
+
+  if (search) {
+    filters.$text = { $search: search };
+  }
+
+  if (category) {
+    filters.category = mongoose.Types.ObjectId(category);
+  }
+
+  if (reference) {
+    filters.reference = mongoose.Types.ObjectId(reference);
+  }
+
+  if (color) {
+    filters["pieces.sizes.color"] = color;
+  }
+
   try {
-    const searchTerm = req.query.search;
-    let products;
-
-    if (!searchTerm || searchTerm.trim() === "") {
-      products = await Product.find({});
-    } else {
-      const regex = new RegExp(searchTerm, "i"); 
-
-      const [categoryIds, referenceIds] = await Promise.all([
-        Categorys.find({ name: { $regex: regex } }).distinct("_id"),
-        reference.find({ name: { $regex: regex } }).distinct("_id"),
-      ]);
-
-      products = await Product.find({
-        $or: [
-          { name: { $regex: regex } },
-          { description: { $regex: regex } },
-          { category: { $in: categoryIds } },
-          { reference: { $in: referenceIds } },
-        ],
-      });
-    }
-
-    res.json(products);
+    const products = await Product.find(filters).populate("category reference");
+    res.status(200).json(products);
   } catch (error) {
     console.error("Error fetching products:", error);
-    res.status(500).json({ error: "Error fetching products" });
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -163,7 +160,7 @@ export const deleteProduct = async (req, res) => {
 
     product.imgs.forEach(async (img) => {
       try {
-        const filePath = img.url.replace(/^.*[\\\/]/, ""); 
+        const filePath = img.url.replace(/^.*[\\\/]/, "");
         fs.unlinkSync(`uploads/${filePath}`); // elimina archivo
       } catch (err) {
         console.error("Error deleting image ", err);
