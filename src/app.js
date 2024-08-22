@@ -13,20 +13,19 @@ import referenceRoutes from "./routes/references.routes";
 import garmentTypeRoutes from "./routes/garmentType.routes";
 import uploadArray from "./controllers/upload";
 
-
 const app = express();
 const cors = require("cors");
 // const cookieParser = require('cookie-parser');
 
-
-
 createRoles();
 
 app.set("pkg", pkg);
-app.use(cors({
-  origin: 'http://localhost:3001', // Reemplaza con la URL de tu cliente React
-  credentials: true, // Esto es necesario para permitir las cookies
-}));
+app.use(
+  cors({
+    origin: "https://lenceriaverona.com/", // Reemplaza con la URL de tu cliente React
+    credentials: true, // Esto es necesario para permitir las cookies
+  })
+);
 // app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(express.json());
@@ -49,6 +48,6 @@ app.use("/api/categorys", categoryRoutes);
 app.use("/api/references", referenceRoutes);
 app.use("/api/uploads", uploadArray);
 app.use("/api/payment", paymentRoutes);
-app.use("/api/orders",ordersRoutes);
+app.use("/api/orders", ordersRoutes);
 
 export default app;
