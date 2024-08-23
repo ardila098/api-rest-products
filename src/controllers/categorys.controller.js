@@ -33,6 +33,7 @@ export const deleteCategory = async (req, res) => {
     const category = await Category.findById(req.params.categoryId);
     console.log(category);
 
+    
     await category.remove();
     res.json({ message: "category deleted" });
   } catch (err) {
