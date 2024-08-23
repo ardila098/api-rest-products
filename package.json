@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "babel src --out-dir build",
-    "dev": "nodemon --exec npx babel-node src/index.js",
+    "dev": "nodemon --exec npx babel-node index.js",
     "start": "node build/index.js"
   },
   "keywords": [],
