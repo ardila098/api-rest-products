@@ -11,7 +11,7 @@ router.post(
   userCtrl.createUser
 );
 
-router.get("/", [authJwt.isAdmin], userCtrl.getUsers);
+router.get("/", [authJwt.verifyToken, authJwt.isModerator], userCtrl.getUsers);
 
 router.get("/:userId", userCtrl.getUserById);
 
