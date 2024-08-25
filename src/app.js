@@ -21,10 +21,7 @@ createRoles();
 
 app.set("pkg", pkg);
 app.use(
-  cors({
-    origin: "https://lenceriaverona.com/", // Reemplaza con la URL de tu cliente React
-    credentials: true, // Esto es necesario para permitir las cookies
-  })
+  cors()
 );
 // app.use(cookieParser());
 app.use(morgan("dev"));
