@@ -26,7 +26,7 @@ var cors = require("cors");
 (0, _initialSetup.createRoles)();
 app.set("pkg", _package["default"]);
 app.use(cors({
-  origin: "https://lenceriaverona.com/",
+  origin: "http://191.101.233.66/",
   // Reemplaza con la URL de tu cliente React
   credentials: true // Esto es necesario para permitir las cookies
 }));
