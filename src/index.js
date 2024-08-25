@@ -1,17 +1,18 @@
 import express from "express";
 import morgan from "morgan";
+import "./database.js";
 import pkg from "../package.json";
 import paymentRoutes from "./routes/payment.routes.js";
-import { createRoles } from "./libs/initialSetup";
-import productsRoutes from "./routes/products.routes";
-import slidersRoutes from "./routes/sliders.routes";
+import { createRoles } from "./libs/initialSetup.js";
+import productsRoutes from "./routes/products.routes.js";
+import slidersRoutes from "./routes/sliders.routes.js";
 import ordersRoutes from "./routes/orders.routes.js";
-import authRoutes from "./routes/auth.routes";
-import userRoutes from "./routes/user.routes";
-import categoryRoutes from "./routes/category.routes";
-import referenceRoutes from "./routes/references.routes";
-import garmentTypeRoutes from "./routes/garmentType.routes";
-import uploadArray from "./controllers/upload";
+import authRoutes from "./routes/auth.routes.js";
+import userRoutes from "./routes/user.routes.js";
+import categoryRoutes from "./routes/category.routes.js";
+import referenceRoutes from "./routes/references.routes.js";
+import garmentTypeRoutes from "./routes/garmentType.routes.js";
+import uploadArray from "./controllers/upload.js";
 
 const app = express();
 const cors = require("cors");
@@ -20,12 +21,8 @@ const cors = require("cors");
 createRoles();
 
 app.set("pkg", pkg);
-app.use(
-  cors({
-    origin: "https://lenceriaverona.com/api", // Reemplaza con la URL de tu cliente React
-    credentials: true, // Esto es necesario para permitir las cookies
-  })
-);
+app.use(cors());
+
 // app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(express.json());
@@ -49,5 +46,9 @@ app.use("/api/references", referenceRoutes);
 app.use("/api/uploads", uploadArray);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/orders", ordersRoutes);
+
+// app.listen(4000);
+app.listen(3000);
+console.log("server listen on port", 3000);
 
 export default app;
