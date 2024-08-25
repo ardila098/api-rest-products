@@ -24,7 +24,7 @@ app.set("pkg", pkg);
 app.use(
   cors({
     origin: "https://lenceriaverona.com/api", // Reemplaza con la URL de tu cliente React
-    credentials: true, // Esto es necesario para permitir las cookies
+    credentials: true, // las cookies
   })
 );
 // app.use(cookieParser());
