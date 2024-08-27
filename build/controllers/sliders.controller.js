@@ -49,7 +49,7 @@ exports.createSlider = /*#__PURE__*/function () {
           _context.next = 16;
           return (0, _sharp["default"])(sharpenedBuffer).toFile(savePath);
         case 16:
-          IMAGE_PATH = "http://api.lenceriaverona.com/uploads/";
+          IMAGE_PATH = "http://localhost:3000/uploads/";
           imgs.push({
             url: IMAGE_PATH + sharpenedUrl
           });

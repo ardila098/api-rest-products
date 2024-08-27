@@ -23,7 +23,7 @@ exports.createSlider = async (req, res) => {
       // Save the sharpened image to a new path
       await sharp(sharpenedBuffer).toFile(savePath);
 
-      const IMAGE_PATH = "http://api.lenceriaverona.com/uploads/";
+      const IMAGE_PATH = "http://localhost:3000/uploads/";
 
       imgs.push({
         url: IMAGE_PATH + sharpenedUrl,
