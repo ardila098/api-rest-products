@@ -17,9 +17,12 @@ export const proccesPayment = async (req, res) => {
     },
 
     back_urls: {
-      success: "http://localhost:3000/api/payment/success",
-      failure: "http://localhost:3000/api/payment/failure",
-      pending: "http://localhost:3000/api/payment/pendign",
+      // success: "http://localhost:3000/api/payment/success",
+      // failure: "http://localhost:3000/api/payment/failure",
+      // pending: "http://localhost:3000/api/payment/pendign",
+      success: "http://api.lenceriaverona.com/api/payment/success",
+      failure: "http://api.lenceriaverona.com/api/payment/failure",
+      pending: "http://api.lenceriaverona.com/api/payment/pendign",
     },
     notification_url:
       "https://7b2b-186-80-28-30.ngrok-free.app/api/payment/webhook",
