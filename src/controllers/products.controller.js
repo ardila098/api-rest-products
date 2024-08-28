@@ -6,37 +6,22 @@ import path from "path";
 
 
 exports.createProduct = async (req, res) => {
-  console.log(req.body);
-
-  console.log("files", req.files);
-  // console.log(req.method); // POST, GET, etc
-  // console.log(req.path); // endpoint llamado
-
   const categoryArray = req.body.category.split(",");
   const categoryIds = categoryArray.map((id) => mongoose.Types.ObjectId(id));
   const imgs = [];
 
-  // Loop through uploaded files
   for (const file of req.files) {
-    const url = file.path.replace(/\\/g, "/");
-
     try {
-      // Apply sharpening using sharp library
       const sharpenedBuffer = await sharp(file.path).sharpen().toBuffer();
-
       const sharpenedUrl = `${file.filename}`;
-      const savePath = path.join(__dirname, "path", "to", "save", sharpenedUrl);
+      const savePath = path.join(__dirname, "uploads", sharpenedUrl);
 
-      // Crear directorio si no existe
       fs.mkdirSync(path.dirname(savePath), { recursive: true });
 
-      // Save the sharpened image to a new path
       await sharp(sharpenedBuffer).toFile(savePath);
 
-      const IMAGE_PATH = "http://api.lenceriaverona.com/src/uploads/";
-
       imgs.push({
-        url: IMAGE_PATH + sharpenedUrl,
+        url: sharpenedUrl,  
       });
     } catch (error) {
       console.error("Error processing image:", error);
@@ -65,7 +50,6 @@ exports.createProduct = async (req, res) => {
     res.status(500).json({ error: "Error creating product" });
   }
 };
-
 export const getProducts = async (req, res) => {
   const { search, category, reference, color } = req.query;
 
@@ -133,7 +117,7 @@ export const updateProductById = async (req, res) => {
       const savePath = path.join(__dirname, "path", "to", "save", sharpenedUrl);
       fs.mkdirSync(path.dirname(savePath), { recursive: true });
       await sharp(sharpenedBuffer).toFile(savePath);
-      const IMAGE_PATH = "https://api.lenceriaverona.com/uploads/";
+      const IMAGE_PATH = "https://localhost:3000/uploads/";
       newImgs.push({
         url: IMAGE_PATH + sharpenedUrl,
       });

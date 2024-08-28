@@ -38,7 +38,6 @@ app.get("/", (req, res) => {
   });
 });
 
-app.use("/uploads", express.static("uploads"));
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use("/api/products", productsRoutes);

@@ -23,69 +23,61 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
 var mongoose = require("mongoose");
 exports.createProduct = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(req, res) {
-    var categoryArray, categoryIds, imgs, _iterator, _step, file, url, sharpenedBuffer, sharpenedUrl, savePath, IMAGE_PATH, pieces, newProduct, savedProduct;
+    var categoryArray, categoryIds, imgs, _iterator, _step, file, sharpenedBuffer, sharpenedUrl, savePath, pieces, newProduct, savedProduct;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
-          console.log(req.body);
-          console.log("files", req.files);
-          // console.log(req.method); // POST, GET, etc
-          // console.log(req.path); // endpoint llamado
           categoryArray = req.body.category.split(",");
           categoryIds = categoryArray.map(function (id) {
             return mongoose.Types.ObjectId(id);
           });
-          imgs = []; // Loop through uploaded files
+          imgs = [];
           _iterator = _createForOfIteratorHelper(req.files);
-          _context.prev = 6;
+          _context.prev = 4;
           _iterator.s();
-        case 8:
+        case 6:
           if ((_step = _iterator.n()).done) {
-            _context.next = 29;
+            _context.next = 25;
             break;
           }
           file = _step.value;
-          url = file.path.replace(/\\/g, "/");
-          _context.prev = 11;
-          _context.next = 14;
+          _context.prev = 8;
+          _context.next = 11;
           return (0, _sharp["default"])(file.path).sharpen().toBuffer();
-        case 14:
+        case 11:
           sharpenedBuffer = _context.sent;
           sharpenedUrl = "".concat(file.filename);
-          savePath = _path["default"].join(__dirname, "path", "to", "save", sharpenedUrl); // Crear directorio si no existe
+          savePath = _path["default"].join(__dirname, "uploads", sharpenedUrl);
           _fs["default"].mkdirSync(_path["default"].dirname(savePath), {
             recursive: true
           });
-
-          // Save the sharpened image to a new path
-          _context.next = 20;
+          _context.next = 17;
           return (0, _sharp["default"])(sharpenedBuffer).toFile(savePath);
-        case 20:
-          IMAGE_PATH = "http://api.lenceriaverona.com/src/uploads/";
+        case 17:
           imgs.push({
-            url: IMAGE_PATH + sharpenedUrl
+            url: sharpenedUrl
           });
-          _context.next = 27;
+          _context.next = 23;
           break;
-        case 24:
-          _context.prev = 24;
-          _context.t0 = _context["catch"](11);
+        case 20:
+          _context.prev = 20;
+          _context.t0 = _context["catch"](8);
           console.error("Error processing image:", _context.t0);
+        case 23:
+          _context.next = 6;
+          break;
+        case 25:
+          _context.next = 30;
+          break;
         case 27:
-          _context.next = 8;
-          break;
-        case 29:
-          _context.next = 34;
-          break;
-        case 31:
-          _context.prev = 31;
-          _context.t1 = _context["catch"](6);
+          _context.prev = 27;
+          _context.t1 = _context["catch"](4);
           _iterator.e(_context.t1);
-        case 34:
-          _context.prev = 34;
+        case 30:
+          _context.prev = 30;
           _iterator.f();
-          return _context.finish(34);
-        case 37:
+          return _context.finish(30);
+        case 33:
           pieces = JSON.parse(req.body.pieces);
           newProduct = new _Product["default"]({
             name: req.body.name,
@@ -98,26 +90,26 @@ exports.createProduct = /*#__PURE__*/function () {
             pieces: pieces,
             imgs: imgs
           });
-          _context.prev = 39;
-          _context.next = 42;
+          _context.prev = 35;
+          _context.next = 38;
           return newProduct.save();
-        case 42:
+        case 38:
           savedProduct = _context.sent;
           res.status(201).json(savedProduct);
-          _context.next = 50;
+          _context.next = 46;
           break;
-        case 46:
-          _context.prev = 46;
-          _context.t2 = _context["catch"](39);
+        case 42:
+          _context.prev = 42;
+          _context.t2 = _context["catch"](35);
           console.error("Error saving product:", _context.t2);
           res.status(500).json({
             error: "Error creating product"
           });
-        case 50:
+        case 46:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[6, 31, 34, 37], [11, 24], [39, 46]]);
+    }, _callee, null, [[4, 27, 30, 33], [8, 20], [35, 42]]);
   }));
   return function (_x, _x2) {
     return _ref.apply(this, arguments);
@@ -248,7 +240,7 @@ var updateProductById = exports.updateProductById = /*#__PURE__*/function () {
           _context4.next = 33;
           return (0, _sharp["default"])(sharpenedBuffer).toFile(savePath);
         case 33:
-          IMAGE_PATH = "https://api.lenceriaverona.com/uploads/";
+          IMAGE_PATH = "https://localhost:3000/uploads/";
           newImgs.push({
             url: IMAGE_PATH + sharpenedUrl
           });
