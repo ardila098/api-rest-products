@@ -36,7 +36,7 @@ app.get("/", function (req, res) {
     description: app.get("pkg").description
   });
 });
-app.use("/uploads", _express["default"]["static"]("uploads"));
+app.use('/uploads', _express["default"]["static"](path.resolve(__dirname, '../uploads')));
 app.use("/api/products", _productsRoutes["default"]);
 app.use("/api/auth", _authRoutes["default"]);
 app.use("/api/sliders", _slidersRoutes["default"]);
