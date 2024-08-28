@@ -21,12 +21,7 @@ const cors = require("cors");
 createRoles();
 
 app.set("pkg", pkg);
-app.use(
-  cors({
-    origin: "*", // Reemplaza con la URL de tu cliente React
-    credentials: true, // las cookies
-  })
-);
+app.use(cors());
 // app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(express.json());
