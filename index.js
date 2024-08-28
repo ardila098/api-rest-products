@@ -16,6 +16,7 @@ import uploadArray from "./controllers/upload.js";
 
 const app = express();
 const cors = require("cors");
+const path = require('path');
 // const cookieParser = require('cookie-parser');
 
 createRoles();
@@ -39,6 +40,7 @@ app.get("/", (req, res) => {
 
 app.use("/uploads", express.static("uploads"));
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use("/api/products", productsRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/sliders", slidersRoutes);
