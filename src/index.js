@@ -13,6 +13,7 @@ import categoryRoutes from "./routes/category.routes.js";
 import referenceRoutes from "./routes/references.routes.js";
 import garmentTypeRoutes from "./routes/garmentType.routes.js";
 import uploadArray from "./controllers/upload.js";
+import path from "path"; 
 
 const app = express();
 const cors = require("cors");
