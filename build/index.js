@@ -19,6 +19,7 @@ var _categoryRoutes = _interopRequireDefault(require("./routes/category.routes.j
 var _referencesRoutes = _interopRequireDefault(require("./routes/references.routes.js"));
 var _garmentTypeRoutes = _interopRequireDefault(require("./routes/garmentType.routes.js"));
 var _upload = _interopRequireDefault(require("./controllers/upload.js"));
+var _path = _interopRequireDefault(require("path"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 var app = (0, _express["default"])();
 var cors = require("cors");
@@ -36,7 +37,7 @@ app.get("/", function (req, res) {
     description: app.get("pkg").description
   });
 });
-app.use('/uploads', _express["default"]["static"](path.resolve(__dirname, '../uploads')));
+app.use('/uploads', _express["default"]["static"](_path["default"].resolve(__dirname, '../uploads')));
 app.use("/api/products", _productsRoutes["default"]);
 app.use("/api/auth", _authRoutes["default"]);
 app.use("/api/sliders", _slidersRoutes["default"]);
