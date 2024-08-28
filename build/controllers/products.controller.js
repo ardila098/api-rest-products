@@ -61,7 +61,7 @@ exports.createProduct = /*#__PURE__*/function () {
           _context.next = 20;
           return (0, _sharp["default"])(sharpenedBuffer).toFile(savePath);
         case 20:
-          IMAGE_PATH = "http://localhost:3000/uploads/";
+          IMAGE_PATH = "http://api.lenceriaverona.com/src/uploads/";
           imgs.push({
             url: IMAGE_PATH + sharpenedUrl
           });
@@ -248,7 +248,7 @@ var updateProductById = exports.updateProductById = /*#__PURE__*/function () {
           _context4.next = 33;
           return (0, _sharp["default"])(sharpenedBuffer).toFile(savePath);
         case 33:
-          IMAGE_PATH = "http://localhost:3000/uploads/";
+          IMAGE_PATH = "https://api.lenceriaverona.com/uploads/";
           newImgs.push({
             url: IMAGE_PATH + sharpenedUrl
           });
