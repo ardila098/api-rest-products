@@ -27,7 +27,10 @@ var cors = require("cors");
 
 (0, _initialSetup.createRoles)();
 app.set("pkg", _package["default"]);
-app.use(cors());
+app.use(cors({
+  origin: "*"
+}));
+
 // app.use(cookieParser());
 app.use((0, _morgan["default"])("dev"));
 app.use(_express["default"].json());
@@ -37,7 +40,7 @@ app.get("/", function (req, res) {
     description: app.get("pkg").description
   });
 });
-app.use('/uploads', _express["default"]["static"](_path["default"].resolve(__dirname, '../uploads')));
+app.use("/uploads", _express["default"]["static"](_path["default"].resolve(__dirname, "../uploads")));
 app.use("/api/products", _productsRoutes["default"]);
 app.use("/api/auth", _authRoutes["default"]);
 app.use("/api/sliders", _slidersRoutes["default"]);

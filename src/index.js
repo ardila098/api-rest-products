@@ -13,7 +13,7 @@ import categoryRoutes from "./routes/category.routes.js";
 import referenceRoutes from "./routes/references.routes.js";
 import garmentTypeRoutes from "./routes/garmentType.routes.js";
 import uploadArray from "./controllers/upload.js";
-import path from "path"; 
+import path from "path";
 
 const app = express();
 const cors = require("cors");
@@ -22,7 +22,12 @@ const cors = require("cors");
 createRoles();
 
 app.set("pkg", pkg);
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
+
 // app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(express.json());
@@ -34,7 +39,7 @@ app.get("/", (req, res) => {
   });
 });
 
-app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')));
+app.use("/uploads", express.static(path.resolve(__dirname, "../uploads")));
 app.use("/api/products", productsRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/sliders", slidersRoutes);
