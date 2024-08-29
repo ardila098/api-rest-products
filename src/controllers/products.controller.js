@@ -117,7 +117,7 @@ export const updateProductById = async (req, res) => {
       const savePath = path.join(__dirname, "path", "to", "save", sharpenedUrl);
       fs.mkdirSync(path.dirname(savePath), { recursive: true });
       await sharp(sharpenedBuffer).toFile(savePath);
-      const IMAGE_PATH = "https://localhost:3000/uploads/";
+      const IMAGE_PATH = "https://api.lenceriaverona.com/uploads/";
       newImgs.push({
         url: IMAGE_PATH + sharpenedUrl,
       });
