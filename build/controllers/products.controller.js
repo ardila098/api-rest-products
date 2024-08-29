@@ -185,7 +185,7 @@ var getProductById = exports.getProductById = /*#__PURE__*/function () {
 }();
 var updateProductById = exports.updateProductById = /*#__PURE__*/function () {
   var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(req, res) {
-    var id, existingProduct, categoryArray, categoryIds, pieces, newImgs, _iterator2, _step2, file, url, sharpenedBuffer, sharpenedUrl, savePath, IMAGE_PATH, existingImgs, existingImgsIds, updatedImgs, savedProduct;
+    var id, existingProduct, categoryArray, categoryIds, pieces, newImgs, _iterator2, _step2, file, url, sharpenedBuffer, sharpenedUrl, savePath, existingImgs, existingImgsIds, updatedImgs, savedProduct;
     return _regeneratorRuntime().wrap(function _callee4$(_context4) {
       while (1) switch (_context4.prev = _context4.next) {
         case 0:
@@ -222,7 +222,7 @@ var updateProductById = exports.updateProductById = /*#__PURE__*/function () {
           _iterator2.s();
         case 21:
           if ((_step2 = _iterator2.n()).done) {
-            _context4.next = 42;
+            _context4.next = 41;
             break;
           }
           file = _step2.value;
@@ -240,31 +240,30 @@ var updateProductById = exports.updateProductById = /*#__PURE__*/function () {
           _context4.next = 33;
           return (0, _sharp["default"])(sharpenedBuffer).toFile(savePath);
         case 33:
-          IMAGE_PATH = "https://localhost:3000/uploads/";
           newImgs.push({
-            url: IMAGE_PATH + sharpenedUrl
+            sharpenedUrl: sharpenedUrl
           });
-          _context4.next = 40;
+          _context4.next = 39;
           break;
-        case 37:
-          _context4.prev = 37;
+        case 36:
+          _context4.prev = 36;
           _context4.t0 = _context4["catch"](24);
           console.error("Error processing image:", _context4.t0);
-        case 40:
+        case 39:
           _context4.next = 21;
           break;
-        case 42:
-          _context4.next = 47;
+        case 41:
+          _context4.next = 46;
           break;
-        case 44:
-          _context4.prev = 44;
+        case 43:
+          _context4.prev = 43;
           _context4.t1 = _context4["catch"](19);
           _iterator2.e(_context4.t1);
-        case 47:
-          _context4.prev = 47;
+        case 46:
+          _context4.prev = 46;
           _iterator2.f();
-          return _context4.finish(47);
-        case 50:
+          return _context4.finish(46);
+        case 49:
           existingImgs = req.body.existingImgs || [];
           existingImgsIds = existingProduct.imgs.map(function (img) {
             return img._id.toString();
@@ -273,16 +272,16 @@ var updateProductById = exports.updateProductById = /*#__PURE__*/function () {
             return existingImgs.includes(existingImgsIds[index]);
           });
           existingProduct.imgs = [].concat(_toConsumableArray(updatedImgs), newImgs);
-          _context4.next = 56;
+          _context4.next = 55;
           return existingProduct.save();
-        case 56:
+        case 55:
           savedProduct = _context4.sent;
           res.status(200).json(savedProduct);
-        case 58:
+        case 57:
         case "end":
           return _context4.stop();
       }
-    }, _callee4, null, [[19, 44, 47, 50], [24, 37]]);
+    }, _callee4, null, [[19, 43, 46, 49], [24, 36]]);
   }));
   return function updateProductById(_x7, _x8) {
     return _ref4.apply(this, arguments);
