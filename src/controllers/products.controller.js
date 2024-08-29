@@ -4,7 +4,6 @@ import sharp from "sharp";
 import fs from "fs";
 import path from "path";
 
-
 exports.createProduct = async (req, res) => {
   const categoryArray = req.body.category.split(",");
   const categoryIds = categoryArray.map((id) => mongoose.Types.ObjectId(id));
@@ -21,7 +20,7 @@ exports.createProduct = async (req, res) => {
       await sharp(sharpenedBuffer).toFile(savePath);
 
       imgs.push({
-        url: sharpenedUrl,  
+        url: sharpenedUrl,
       });
     } catch (error) {
       console.error("Error processing image:", error);
@@ -53,7 +52,7 @@ exports.createProduct = async (req, res) => {
 export const getProducts = async (req, res) => {
   const { search, category, reference, color } = req.query;
 
-  const filters = {}; 
+  const filters = {};
 
   if (search) {
     filters.$text = { $search: search };
@@ -118,7 +117,7 @@ export const updateProductById = async (req, res) => {
       fs.mkdirSync(path.dirname(savePath), { recursive: true });
       await sharp(sharpenedBuffer).toFile(savePath);
       newImgs.push({
-        sharpenedUrl,
+        url: sharpenedUrl,
       });
     } catch (error) {
       console.error("Error processing image:", error);

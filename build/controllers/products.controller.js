@@ -241,7 +241,7 @@ var updateProductById = exports.updateProductById = /*#__PURE__*/function () {
           return (0, _sharp["default"])(sharpenedBuffer).toFile(savePath);
         case 33:
           newImgs.push({
-            sharpenedUrl: sharpenedUrl
+            url: sharpenedUrl
           });
           _context4.next = 39;
           break;
