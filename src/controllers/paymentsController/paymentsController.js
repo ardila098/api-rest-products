@@ -18,8 +18,8 @@ export const proccesPayment = async (req, res) => {
 
     back_urls: {
       success: "api.lenceriaverona.com/api/payment/success",
-      failure: "api.lenceriaverona.com:3000/api/payment/failure",
-      pending: "api.lenceriaverona.com:3000/api/payment/pendign",
+      failure: "api.lenceriaverona.com:api/payment/failure",
+      pending: "api.lenceriaverona.com:api/payment/pendign",
     },
     notification_url:
       "https://7b2b-186-80-28-30.ngrok-free.app/api/payment/webhook",

@@ -23,10 +23,9 @@ exports.createSlider = async (req, res) => {
       // Save the sharpened image to a new path
       await sharp(sharpenedBuffer).toFile(savePath);
 
-      const IMAGE_PATH = "https://api.lenceriaverona.com/src/uploads/";
 
       imgs.push({
-        url: IMAGE_PATH + sharpenedUrl,
+        url: sharpenedUrl,
       });
     } catch (error) {
       console.error("Error processing image:", error);

@@ -19,7 +19,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
 exports.createSlider = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(req, res) {
     var _req$body$items;
-    var imgs, _iterator, _step, file, url, sharpenedBuffer, sharpenedUrl, savePath, IMAGE_PATH, newSlider, savedSlider;
+    var imgs, _iterator, _step, file, url, sharpenedBuffer, sharpenedUrl, savePath, newSlider, savedSlider;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -29,7 +29,7 @@ exports.createSlider = /*#__PURE__*/function () {
           _iterator.s();
         case 4:
           if ((_step = _iterator.n()).done) {
-            _context.next = 25;
+            _context.next = 24;
             break;
           }
           file = _step.value;
@@ -49,31 +49,30 @@ exports.createSlider = /*#__PURE__*/function () {
           _context.next = 16;
           return (0, _sharp["default"])(sharpenedBuffer).toFile(savePath);
         case 16:
-          IMAGE_PATH = "https://api.lenceriaverona.com/src/uploads/";
           imgs.push({
-            url: IMAGE_PATH + sharpenedUrl
+            url: sharpenedUrl
           });
-          _context.next = 23;
+          _context.next = 22;
           break;
-        case 20:
-          _context.prev = 20;
+        case 19:
+          _context.prev = 19;
           _context.t0 = _context["catch"](7);
           console.error("Error processing image:", _context.t0);
-        case 23:
+        case 22:
           _context.next = 4;
           break;
-        case 25:
-          _context.next = 30;
+        case 24:
+          _context.next = 29;
           break;
-        case 27:
-          _context.prev = 27;
+        case 26:
+          _context.prev = 26;
           _context.t1 = _context["catch"](2);
           _iterator.e(_context.t1);
-        case 30:
-          _context.prev = 30;
+        case 29:
+          _context.prev = 29;
           _iterator.f();
-          return _context.finish(30);
-        case 33:
+          return _context.finish(29);
+        case 32:
           console.log(imgs, "cok");
           newSlider = new _Slider["default"]({
             name: req.body.name,
@@ -87,26 +86,26 @@ exports.createSlider = /*#__PURE__*/function () {
               };
             })
           });
-          _context.prev = 35;
-          _context.next = 38;
+          _context.prev = 34;
+          _context.next = 37;
           return newSlider.save();
-        case 38:
+        case 37:
           savedSlider = _context.sent;
           res.status(201).json(savedSlider);
-          _context.next = 46;
+          _context.next = 45;
           break;
-        case 42:
-          _context.prev = 42;
-          _context.t2 = _context["catch"](35);
+        case 41:
+          _context.prev = 41;
+          _context.t2 = _context["catch"](34);
           console.error("Error saving slider:", _context.t2);
           res.status(500).json({
             error: "Error creating slider"
           });
-        case 46:
+        case 45:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[2, 27, 30, 33], [7, 20], [35, 42]]);
+    }, _callee, null, [[2, 26, 29, 32], [7, 19], [34, 41]]);
   }));
   return function (_x, _x2) {
     return _ref.apply(this, arguments);
