@@ -23,15 +23,8 @@ createRoles();
 
 app.set("pkg", pkg);
 
-const corsOptions = {
-  origin: [
-    "http://lenceriaverona.com",
-    "https://lenceriaverona.com",
-    "http://localhost:3000",
-  ],
-  credentials: true,
-};
-app.use(cors(corsOptions));
+
+app.use(cors('*'));
 
 // app.use(cookieParser());
 app.use(morgan("dev"));
