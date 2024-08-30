@@ -22,9 +22,13 @@ const cors = require("cors");
 createRoles();
 
 app.set("pkg", pkg);
+
 app.use(
   cors({
-    origin: "*",
+    origin: ["https://lenceriaverona.com", "https://www.lenceriaverona.com"],
+    methods: "GET,POST,PUT,DELETE",
+    allowedHeaders: "Authorization,Content-Type",
+    credentials: true,
   })
 );
 
