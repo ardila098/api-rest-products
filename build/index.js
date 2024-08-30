@@ -28,7 +28,10 @@ var cors = require("cors");
 (0, _initialSetup.createRoles)();
 app.set("pkg", _package["default"]);
 app.use(cors({
-  origin: "*"
+  origin: ["https://lenceriaverona.com", "https://www.lenceriaverona.com"],
+  methods: "GET,POST,PUT,DELETE",
+  allowedHeaders: "Authorization,Content-Type",
+  credentials: true
 }));
 
 // app.use(cookieParser());
