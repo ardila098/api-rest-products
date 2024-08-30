@@ -172,8 +172,9 @@ var getProductById = exports.getProductById = /*#__PURE__*/function () {
           return _Product["default"].findById(req.params.productId);
         case 2:
           product = _context3.sent;
+          console.log(product);
           res.status(200).json(product);
-        case 4:
+        case 5:
         case "end":
           return _context3.stop();
       }
