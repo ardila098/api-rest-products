@@ -1,34 +1,28 @@
 "use strict";
 
+// upload.js
+
 var multer = require("multer");
-var path = require('path');
-var uploadDir = path.join(__dirname, '../public/uploads');
 var storage = multer.diskStorage({
   destination: function destination(req, file, cb) {
-    cb(null, uploadDir);
+    cb(null, "../public/uploads");
   },
   filename: function filename(req, file, cb) {
     cb(null, "".concat(Date.now(), "-").concat(file.originalname));
   }
 });
-var uploadConfig = {
+var multerConfig = {
   storage: storage,
   limits: {
     fileSize: 1000000
   },
   // 1MB
   fileFilter: function fileFilter(req, file, cb) {
-    var allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-    if (allowedTypes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(new Error('Solo se permiten tipos de archivo JPEG, PNG o GIF'));
-    }
+    // filters
+
+    cb(null, true);
   }
 };
-var uploadSingle = multer(uploadConfig).single('image');
-var uploadMultiple = multer(uploadConfig).array('imgs');
-module.exports = {
-  uploadSingle: uploadSingle,
-  uploadMultiple: uploadMultiple
-};
+var upload = multer(multerConfig);
+var uploadArray = upload.array("imgs");
+module.exports = uploadArray;
