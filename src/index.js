@@ -38,7 +38,7 @@ app.get("/", (req, res) => {
   });
 });
 
-app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, '..', 'public', 'uploads')));
 app.use("/api/products", productsRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/sliders", slidersRoutes);
