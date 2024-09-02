@@ -51,6 +51,7 @@ app.use("/api/payment", paymentRoutes);
 app.use("/api/orders", ordersRoutes);
 
 // app.listen(4000);
+
 app.listen(3000);
 console.log("server listen on port", 3000);
 
