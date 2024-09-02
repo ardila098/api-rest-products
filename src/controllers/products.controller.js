@@ -16,6 +16,7 @@ exports.createProduct = async (req, res) => {
       const savePath = path.join(__dirname, '..', 'public', 'uploads', sharpenedUrl);
 
 
+
       fs.mkdirSync(path.dirname(savePath), { recursive: true });
 
       await sharp(sharpenedBuffer).toFile(savePath);
