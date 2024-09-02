@@ -1,19 +1,17 @@
 "use strict";
 
-var multer = require("multer");
-var path = require('path');
-var fs = require('fs');
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var _multer = _interopRequireDefault(require("multer"));
+var _path = _interopRequireDefault(require("path"));
+var _dotenv = _interopRequireDefault(require("dotenv"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
+_dotenv["default"].config(); // Asegúrate de cargar las variables de entorno
 
-// Obtener la ruta absoluta del directorio de uploads
-var uploadDir = path.resolve(__dirname, '..', 'public', 'uploads');
-
-// Crear el directorio si no existe
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, {
-    recursive: true
-  });
-}
-var storage = multer.diskStorage({
+var uploadDir = _path["default"].resolve(process.cwd(), process.env.UPLOAD_DIR);
+var storage = _multer["default"].diskStorage({
   destination: function destination(req, file, cb) {
     cb(null, uploadDir);
   },
@@ -21,23 +19,20 @@ var storage = multer.diskStorage({
     cb(null, "".concat(Date.now(), "-").concat(file.originalname));
   }
 });
-var multerConfig = {
+var upload = (0, _multer["default"])({
   storage: storage,
   limits: {
     fileSize: 1000000
   },
   // 1MB
   fileFilter: function fileFilter(req, file, cb) {
-    // Filtros para tipos de archivo permitidos
     var allowedFileTypes = /jpeg|jpg|png/;
     var mimeType = allowedFileTypes.test(file.mimetype);
-    var extname = allowedFileTypes.test(path.extname(file.originalname));
+    var extname = allowedFileTypes.test(_path["default"].extname(file.originalname));
     if (mimeType && extname) {
       return cb(null, true);
     }
     cb("Solo se permiten archivos de imagen (JPEG/JPG/PNG)");
   }
-};
-var upload = multer(multerConfig);
-var uploadArray = upload.array("imgs");
-module.exports = uploadArray;
+});
+var _default = exports["default"] = upload.array('imgs');

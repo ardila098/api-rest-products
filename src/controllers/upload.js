@@ -1,14 +1,10 @@
-const multer = require("multer");
-const path = require('path');
-const fs = require('fs');
+import multer from 'multer';
+import path from 'path';
+import dotenv from 'dotenv';
 
-// Obtener la ruta absoluta del directorio de uploads
-const uploadDir = path.resolve(__dirname, '..', 'public', 'uploads');
+dotenv.config(); // Asegúrate de cargar las variables de entorno
 
-// Crear el directorio si no existe
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
+const uploadDir = path.resolve(process.cwd(), process.env.UPLOAD_DIR);
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -19,11 +15,10 @@ const storage = multer.diskStorage({
   },
 });
 
-const multerConfig = {
+const upload = multer({
   storage: storage,
   limits: { fileSize: 1000000 }, // 1MB
   fileFilter: (req, file, cb) => {
-    // Filtros para tipos de archivo permitidos
     const allowedFileTypes = /jpeg|jpg|png/;
     const mimeType = allowedFileTypes.test(file.mimetype);
     const extname = allowedFileTypes.test(path.extname(file.originalname));
@@ -33,10 +28,6 @@ const multerConfig = {
     }
     cb("Solo se permiten archivos de imagen (JPEG/JPG/PNG)");
   },
-};
+});
 
-const upload = multer(multerConfig);
-
-const uploadArray = upload.array("imgs");
-
-module.exports = uploadArray;
+export default upload.array('imgs');
