@@ -47,7 +47,7 @@ exports.createProduct = /*#__PURE__*/function () {
         case 11:
           sharpenedBuffer = _context.sent;
           sharpenedUrl = "".concat(file.filename);
-          savePath = _path["default"].join(__dirname, "uploads", sharpenedUrl);
+          savePath = _path["default"].join(__dirname, '..', 'public', 'uploads', sharpenedUrl);
           _fs["default"].mkdirSync(_path["default"].dirname(savePath), {
             recursive: true
           });
