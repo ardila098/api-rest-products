@@ -52,6 +52,7 @@ app.use("/api/payment", _paymentRoutes["default"]);
 app.use("/api/orders", _ordersRoutes["default"]);
 
 // app.listen(4000);
+
 app.listen(3000);
 console.log("server listen on port", 3000);
 var _default = exports["default"] = app;
