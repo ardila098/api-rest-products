@@ -3,6 +3,8 @@ const router = Router();
 
 import * as productsCrtl from "../controllers/products.controller";
 
+
+
 //importamos los midelwares para la utenticacion de tokens
 
 import { authJwt } from "../middlewares";

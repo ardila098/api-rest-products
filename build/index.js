@@ -39,7 +39,7 @@ app.get("/", function (req, res) {
     description: app.get("pkg").description
   });
 });
-app.use('/uploads', _express["default"]["static"](_path["default"].join(__dirname, '..', 'public', 'uploads')));
+app.use('/images', _express["default"]["static"](_path["default"].join(__dirname, '..', 'public', 'images')));
 app.use("/api/products", _productsRoutes["default"]);
 app.use("/api/auth", _authRoutes["default"]);
 app.use("/api/sliders", _slidersRoutes["default"]);

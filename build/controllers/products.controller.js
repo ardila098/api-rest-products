@@ -4,7 +4,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateProductById = exports.getProductById = exports.deleteProduct = void 0;
+exports.updateProductById = exports.getProducts = exports.getProductById = exports.deleteProduct = exports.createProduct = void 0;
 var _Product = _interopRequireDefault(require("../models/Product"));
 var _sharp = _interopRequireDefault(require("sharp"));
 var _fs = _interopRequireDefault(require("fs"));
@@ -21,7 +21,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 var mongoose = require("mongoose");
-exports.createProduct = /*#__PURE__*/function () {
+var createProduct = exports.createProduct = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(req, res) {
     var categoryArray, categoryIds, imgs, _iterator, _step, file, sharpenedBuffer, sharpenedUrl, savePath, pieces, newProduct, savedProduct;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
@@ -111,109 +111,54 @@ exports.createProduct = /*#__PURE__*/function () {
       }
     }, _callee, null, [[4, 27, 30, 33], [8, 20], [35, 42]]);
   }));
-  return function (_x, _x2) {
+  return function createProduct(_x, _x2) {
     return _ref.apply(this, arguments);
   };
 }();
-exports.updateProductById = /*#__PURE__*/function () {
+var getProducts = exports.getProducts = /*#__PURE__*/function () {
   var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(req, res) {
-    var id, existingProduct, categoryArray, categoryIds, pieces, newImgs, _iterator2, _step2, file, sharpenedBuffer, sharpenedUrl, savePath, existingImgs, existingImgsIds, updatedImgs, savedProduct;
+    var _req$query, search, category, reference, color, filters, products;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
-          id = req.params.productId;
-          _context2.next = 3;
-          return _Product["default"].findById(id);
-        case 3:
-          existingProduct = _context2.sent;
-          if (existingProduct) {
-            _context2.next = 6;
-            break;
+          _req$query = req.query, search = _req$query.search, category = _req$query.category, reference = _req$query.reference, color = _req$query.color;
+          filters = {};
+          if (search) {
+            filters.$text = {
+              $search: search
+            };
           }
-          return _context2.abrupt("return", res.status(404).json({
-            error: "Product not found"
-          }));
-        case 6:
-          categoryArray = req.body.category.split(",");
-          categoryIds = categoryArray.map(function (id) {
-            return mongoose.Types.ObjectId(id);
-          });
-          pieces = JSON.parse(req.body.pieces);
-          existingProduct.name = req.body.name;
-          existingProduct.price = req.body.price;
-          existingProduct.description = req.body.description;
-          existingProduct.category = categoryIds;
-          existingProduct.stock = req.body.stock;
-          existingProduct.garmentType = req.body.garmentType;
-          existingProduct.pieces = pieces;
-          existingProduct.reference = req.body.reference;
-          newImgs = [];
-          _iterator2 = _createForOfIteratorHelper(req.files);
-          _context2.prev = 19;
-          _iterator2.s();
-        case 21:
-          if ((_step2 = _iterator2.n()).done) {
-            _context2.next = 40;
-            break;
+          if (category) {
+            filters.category = mongoose.Types.ObjectId(category);
           }
-          file = _step2.value;
-          _context2.prev = 23;
-          _context2.next = 26;
-          return (0, _sharp["default"])(file.path).sharpen().toBuffer();
-        case 26:
-          sharpenedBuffer = _context2.sent;
-          sharpenedUrl = "".concat(file.filename);
-          savePath = _path["default"].join(__dirname, '..', 'images', sharpenedUrl);
-          _fs["default"].mkdirSync(_path["default"].dirname(savePath), {
-            recursive: true
-          });
-          _context2.next = 32;
-          return (0, _sharp["default"])(sharpenedBuffer).toFile(savePath);
-        case 32:
-          newImgs.push({
-            url: sharpenedUrl
-          });
-          _context2.next = 38;
+          if (reference) {
+            filters.reference = mongoose.Types.ObjectId(reference);
+          }
+          if (color) {
+            filters["pieces.sizes.color"] = color;
+          }
+          _context2.prev = 6;
+          _context2.next = 9;
+          return _Product["default"].find(filters).populate("category reference");
+        case 9:
+          products = _context2.sent;
+          res.status(200).json(products);
+          _context2.next = 17;
           break;
-        case 35:
-          _context2.prev = 35;
-          _context2.t0 = _context2["catch"](23);
-          console.error("Error processing image:", _context2.t0);
-        case 38:
-          _context2.next = 21;
-          break;
-        case 40:
-          _context2.next = 45;
-          break;
-        case 42:
-          _context2.prev = 42;
-          _context2.t1 = _context2["catch"](19);
-          _iterator2.e(_context2.t1);
-        case 45:
-          _context2.prev = 45;
-          _iterator2.f();
-          return _context2.finish(45);
-        case 48:
-          existingImgs = req.body.existingImgs || [];
-          existingImgsIds = existingProduct.imgs.map(function (img) {
-            return img._id.toString();
+        case 13:
+          _context2.prev = 13;
+          _context2.t0 = _context2["catch"](6);
+          console.error("Error fetching products:", _context2.t0);
+          res.status(500).json({
+            error: "Internal server error"
           });
-          updatedImgs = existingProduct.imgs.filter(function (img, index) {
-            return existingImgs.includes(existingImgsIds[index]);
-          });
-          existingProduct.imgs = [].concat(_toConsumableArray(updatedImgs), newImgs);
-          _context2.next = 54;
-          return existingProduct.save();
-        case 54:
-          savedProduct = _context2.sent;
-          res.status(200).json(savedProduct);
-        case 56:
+        case 17:
         case "end":
           return _context2.stop();
       }
-    }, _callee2, null, [[19, 42, 45, 48], [23, 35]]);
+    }, _callee2, null, [[6, 13]]);
   }));
-  return function (_x3, _x4) {
+  return function getProducts(_x3, _x4) {
     return _ref2.apply(this, arguments);
   };
 }();
@@ -241,7 +186,7 @@ var getProductById = exports.getProductById = /*#__PURE__*/function () {
 }();
 var updateProductById = exports.updateProductById = /*#__PURE__*/function () {
   var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(req, res) {
-    var id, existingProduct, categoryArray, categoryIds, pieces, newImgs, _iterator3, _step3, file, url, sharpenedBuffer, sharpenedUrl, savePath, existingImgs, existingImgsIds, updatedImgs, savedProduct;
+    var id, existingProduct, categoryArray, categoryIds, pieces, newImgs, _iterator2, _step2, file, url, sharpenedBuffer, sharpenedUrl, savePath, existingImgs, existingImgsIds, updatedImgs, savedProduct;
     return _regeneratorRuntime().wrap(function _callee4$(_context4) {
       while (1) switch (_context4.prev = _context4.next) {
         case 0:
@@ -273,15 +218,15 @@ var updateProductById = exports.updateProductById = /*#__PURE__*/function () {
           existingProduct.pieces = pieces;
           existingProduct.reference = req.body.reference;
           newImgs = [];
-          _iterator3 = _createForOfIteratorHelper(req.files);
+          _iterator2 = _createForOfIteratorHelper(req.files);
           _context4.prev = 19;
-          _iterator3.s();
+          _iterator2.s();
         case 21:
-          if ((_step3 = _iterator3.n()).done) {
+          if ((_step2 = _iterator2.n()).done) {
             _context4.next = 41;
             break;
           }
-          file = _step3.value;
+          file = _step2.value;
           url = file.path.replace(/\\/g, "/");
           _context4.prev = 24;
           _context4.next = 27;
@@ -314,10 +259,10 @@ var updateProductById = exports.updateProductById = /*#__PURE__*/function () {
         case 43:
           _context4.prev = 43;
           _context4.t1 = _context4["catch"](19);
-          _iterator3.e(_context4.t1);
+          _iterator2.e(_context4.t1);
         case 46:
           _context4.prev = 46;
-          _iterator3.f();
+          _iterator2.f();
           return _context4.finish(46);
         case 49:
           existingImgs = req.body.existingImgs || [];
