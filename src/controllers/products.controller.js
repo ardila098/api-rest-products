@@ -13,12 +13,9 @@ exports.createProduct = async (req, res) => {
     try {
       const sharpenedBuffer = await sharp(file.path).sharpen().toBuffer();
       const sharpenedUrl = `${file.filename}`;
-      const savePath = path.join(__dirname, '..', 'public', 'uploads', sharpenedUrl);
-
-
+      const savePath = path.join(__dirname, "..", "images", sharpenedUrl);
 
       fs.mkdirSync(path.dirname(savePath), { recursive: true });
-
       await sharp(sharpenedBuffer).toFile(savePath);
 
       imgs.push({
@@ -51,39 +48,58 @@ exports.createProduct = async (req, res) => {
     res.status(500).json({ error: "Error creating product" });
   }
 };
-export const getProducts = async (req, res) => {
-  const { search, category, reference, color } = req.query;
+exports.updateProductById = async (req, res) => {
+  const id = req.params.productId;
+  const existingProduct = await Product.findById(id);
 
-  const filters = {};
-
-  if (search) {
-    filters.$text = { $search: search };
+  if (!existingProduct) {
+    return res.status(404).json({ error: "Product not found" });
   }
 
-  if (category) {
-    filters.category = mongoose.Types.ObjectId(category);
+  const categoryArray = req.body.category.split(",");
+  const categoryIds = categoryArray.map((id) => mongoose.Types.ObjectId(id));
+  const pieces = JSON.parse(req.body.pieces);
+
+  existingProduct.name = req.body.name;
+  existingProduct.price = req.body.price;
+  existingProduct.description = req.body.description;
+  existingProduct.category = categoryIds;
+  existingProduct.stock = req.body.stock;
+  existingProduct.garmentType = req.body.garmentType;
+  existingProduct.pieces = pieces;
+  existingProduct.reference = req.body.reference;
+
+  const newImgs = [];
+  for (const file of req.files) {
+    try {
+      const sharpenedBuffer = await sharp(file.path).sharpen().toBuffer();
+      const sharpenedUrl = `${file.filename}`;
+      const savePath = path.join(__dirname, '..', 'images', sharpenedUrl);
+      fs.mkdirSync(path.dirname(savePath), { recursive: true });
+      await sharp(sharpenedBuffer).toFile(savePath);
+      newImgs.push({
+        url: sharpenedUrl,
+      });
+    } catch (error) {
+      console.error("Error processing image:", error);
+    }
   }
 
-  if (reference) {
-    filters.reference = mongoose.Types.ObjectId(reference);
-  }
+  const existingImgs = req.body.existingImgs || [];
+  const existingImgsIds = existingProduct.imgs.map((img) => img._id.toString());
+  const updatedImgs = existingProduct.imgs.filter((img, index) =>
+    existingImgs.includes(existingImgsIds[index])
+  );
 
-  if (color) {
-    filters["pieces.sizes.color"] = color;
-  }
+  existingProduct.imgs = [...updatedImgs, ...newImgs];
 
-  try {
-    const products = await Product.find(filters).populate("category reference");
-    res.status(200).json(products);
-  } catch (error) {
-    console.error("Error fetching products:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
+  const savedProduct = await existingProduct.save();
+  res.status(200).json(savedProduct);
 };
 
 export const getProductById = async (req, res) => {
   const product = await Product.findById(req.params.productId);
-  console.log(product)
+  console.log(product);
   res.status(200).json(product);
 };
 

@@ -8,9 +8,13 @@ var _multer = _interopRequireDefault(require("multer"));
 var _path = _interopRequireDefault(require("path"));
 var _dotenv = _interopRequireDefault(require("dotenv"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
-_dotenv["default"].config(); // Asegúrate de cargar las variables de entorno
-
-var uploadDir = _path["default"].resolve(process.cwd(), process.env.UPLOAD_DIR);
+_dotenv["default"].config();
+var uploadDir;
+if (process.env.NODE_ENV === 'production') {
+  uploadDir = '/var/www/product-images/';
+} else {
+  uploadDir = _path["default"].join(__dirname, '../public', 'images');
+}
 var storage = _multer["default"].diskStorage({
   destination: function destination(req, file, cb) {
     cb(null, uploadDir);

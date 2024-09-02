@@ -2,9 +2,14 @@ import multer from 'multer';
 import path from 'path';
 import dotenv from 'dotenv';
 
-dotenv.config(); // Asegúrate de cargar las variables de entorno
+dotenv.config();
 
-const uploadDir = path.resolve(process.cwd(), process.env.UPLOAD_DIR);
+let uploadDir;
+if (process.env.NODE_ENV === 'production') {
+  uploadDir = '/var/www/product-images/';
+} else {
+  uploadDir = path.join(__dirname, '../public', 'images');
+}
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
