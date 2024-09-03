@@ -1,15 +1,12 @@
-import multer from 'multer';
-import path from 'path';
-import dotenv from 'dotenv';
+import multer from "multer";
+import path from "path";
+import dotenv from "dotenv";
 
 dotenv.config();
 
-let uploadDir;
-if (process.env.NODE_ENV === 'production') {
-  uploadDir = '/var/www/product-images/';
-} else {
-  uploadDir = path.join(__dirname, '../public', 'images');
-}
+const uploadDir = "/var/www/product-images/";
+
+// uploadDir = path.join(__dirname, '../public', 'images');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -27,7 +24,7 @@ const upload = multer({
     const allowedFileTypes = /jpeg|jpg|png/;
     const mimeType = allowedFileTypes.test(file.mimetype);
     const extname = allowedFileTypes.test(path.extname(file.originalname));
-    
+
     if (mimeType && extname) {
       return cb(null, true);
     }
@@ -35,4 +32,4 @@ const upload = multer({
   },
 });
 
-export default upload.array('imgs');
+export default upload.array("imgs");
