@@ -8,23 +8,11 @@ exports["default"] = void 0;
 var _express = require("express");
 var _middlewares = require("../middlewares");
 var authCtrl = _interopRequireWildcard(require("../controllers/auth.controller"));
-var _authjwt = require("../middlewares/authjwt");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
 function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 var router = (0, _express.Router)();
-require("../controllers/auth.controller");
-router.post("/signup", _middlewares.verifySignup.checkDuplicateUsernameOrEmail, _middlewares.verifySignup.checkRolesExisted, authCtrl.signup, function (req, res) {
-  res.render("signup");
-});
-router.post("/signin", authCtrl.signin, function (req, res) {
-  res.render("signin");
-});
-router.post("/verifySession", _authjwt.verifyToken, function (req, res) {
-  console.log(res);
-  res.json({
-    message: "Session is valid",
-    userId: req.userId
-  });
-});
+router.post("/signup", _middlewares.verifySignup.checkDuplicateUsernameOrEmail, _middlewares.verifySignup.checkRolesExisted, authCtrl.signup);
+router.post("/signin", authCtrl.signin);
+router.post("/verifySession", authCtrl.verifySession);
 router.post("/signup", authCtrl.signup);
 var _default = exports["default"] = router;

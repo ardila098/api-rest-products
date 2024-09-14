@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 
 import config from "../config";
 import Role from "../models/Role";
+import { verifyToken } from "../middlewares/authjwt";
 
 export const signup = async (req, res) => {
   //desde req. body yo voy a esperar que el usuario me envie los datos
@@ -68,4 +69,47 @@ export const signin = async (req, res) => {
 
   // Enviar respuesta
   res.json({ token });
+};
+
+
+
+export const verifySession = async (req, res) => {
+  const { token } = req.body;
+
+  console.log(token)
+
+  if (!token) {
+    return res.status(400).json({ message: "No token provided" });
+  }
+
+  try {
+    // Verificar el token
+    const decoded = jwt.verify(token, config.SECRET);
+
+    // Buscar al usuario y poblar los roles
+    const user = await User.findById(decoded.id).populate("roles");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Devolver la información del usuario
+    res.json({
+      message: "Session is valid",
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        roles: user.roles.map((role) => role.name),
+      },
+    });
+  } catch (error) {
+    if (error instanceof jwt.JsonWebTokenError) {
+      // Error específico para tokens inválidos
+      return res.status(401).json({ message: "Invalid token" });
+    }
+    // Otros errores (por ejemplo, problemas de base de datos)
+    console.error("Error verifying session:", error);
+    res.status(500).json({ message: "Error verifying session" });
+  }
 };
