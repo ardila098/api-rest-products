@@ -25,7 +25,22 @@ export const getCategoryById = async (req, res) => {
 };
 
 export const updateCategoryById = async (req, res) => {
-  console.log(req.body);
+  try {
+    const updatedCategory = await Category.findByIdAndUpdate(
+      req.params.categoryId,
+      { name: req.body.name }, 
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedCategory) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+
+    res.status(200).json(updatedCategory);
+  } catch (error) {
+    console.error("Error updating category:", error);
+    res.status(500).json({ error: "Error updating category" });
+  }
 };
 
 export const deleteCategory = async (req, res) => {
@@ -33,7 +48,6 @@ export const deleteCategory = async (req, res) => {
     const category = await Category.findById(req.params.categoryId);
     console.log(category);
 
-    
     await category.remove();
     res.json({ message: "category deleted" });
   } catch (err) {

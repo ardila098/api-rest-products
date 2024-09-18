@@ -14,6 +14,7 @@ const productSchema = new Schema(
       ref: "Reference",
     },
     price: { type: Number, index: true },
+    discountPercentage: { type: Number, default: 0 },
     description: { type: String, index: true },
     stock: Number,
     imgs: [

@@ -37,6 +37,7 @@ export const createProduct = async (req, res) => {
     stock: req.body.stock,
     reference: req.body.reference,
     pieces: pieces,
+    discountPercentage: req.body.discountPercentage,
     imgs,
   });
 
@@ -107,6 +108,7 @@ export const updateProductById = async (req, res) => {
   existingProduct.garmentType = req.body.garmentType;
   existingProduct.pieces = pieces;
   existingProduct.reference = req.body.reference;
+  existingProduct.discountPercentage = req.body.discountPercentage;
 
   const newImgs = [];
   for (const file of req.files) {

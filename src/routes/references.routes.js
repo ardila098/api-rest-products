@@ -11,6 +11,6 @@ router.get("/", referencesCrtl.getReferences);
 
 router.put("/:referenceId", referencesCrtl.updateReference);
 
-// router.delete("/:referenceId", referencesCrtl.deleteReference);
+router.delete("/:referenceId", referencesCrtl.deleteReference);
 
 export default router;

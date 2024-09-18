@@ -43,9 +43,9 @@ export const updateGarmenTypeById = async (req, res) => {
 export const deleteGarmentType = async (req, res) => {
   try {
     const garmentType = await GarmentType.findById(req.params.garmentTypeId);
-    console.log(garmentType);
 
     await garmentType.remove();
+
     res.json({ message: "GarmenType deleted" });
   } catch (err) {
     console.error(err);

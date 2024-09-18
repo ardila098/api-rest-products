@@ -19,6 +19,23 @@ export const getReferences = async (req, res) => {
   res.json(references);
 };
 
+export const deleteReference = async (req, res) => {
+  const id = req.params.referenceId;
+
+  try {
+    const deletedReference = await Reference.findByIdAndDelete(id);
+
+    if (!deletedReference) {
+      return res.status(404).json({ error: "Reference not found" });
+    }
+
+    res.status(204).send();
+  } catch (error) {
+    console.error("Error deleting reference:", error);
+    res.status(500).json({ error: "Error deleting reference" });
+  }
+};
+
 export const updateReference = async (req, res) => {
   const id = req.params.referenceId;
   const newDataReference = { name: req.body.name };
