@@ -22,6 +22,10 @@ var productSchema = new _mongoose.Schema({
     type: Number,
     index: true
   },
+  discountPercentage: {
+    type: Number,
+    "default": 0
+  },
   description: {
     type: String,
     index: true

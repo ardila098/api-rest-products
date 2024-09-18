@@ -88,15 +88,43 @@ var getCategoryById = exports.getCategoryById = /*#__PURE__*/function () {
 }();
 var updateCategoryById = exports.updateCategoryById = /*#__PURE__*/function () {
   var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(req, res) {
+    var updatedCategory;
     return _regeneratorRuntime().wrap(function _callee4$(_context4) {
       while (1) switch (_context4.prev = _context4.next) {
         case 0:
-          console.log(req.body);
-        case 1:
+          _context4.prev = 0;
+          _context4.next = 3;
+          return _Categorys["default"].findByIdAndUpdate(req.params.categoryId, {
+            name: req.body.name
+          }, {
+            "new": true,
+            runValidators: true
+          });
+        case 3:
+          updatedCategory = _context4.sent;
+          if (updatedCategory) {
+            _context4.next = 6;
+            break;
+          }
+          return _context4.abrupt("return", res.status(404).json({
+            message: "Category not found"
+          }));
+        case 6:
+          res.status(200).json(updatedCategory);
+          _context4.next = 13;
+          break;
+        case 9:
+          _context4.prev = 9;
+          _context4.t0 = _context4["catch"](0);
+          console.error("Error updating category:", _context4.t0);
+          res.status(500).json({
+            error: "Error updating category"
+          });
+        case 13:
         case "end":
           return _context4.stop();
       }
-    }, _callee4);
+    }, _callee4, null, [[0, 9]]);
   }));
   return function updateCategoryById(_x7, _x8) {
     return _ref4.apply(this, arguments);

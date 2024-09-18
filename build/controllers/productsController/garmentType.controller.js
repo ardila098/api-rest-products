@@ -113,27 +113,26 @@ var deleteGarmentType = exports.deleteGarmentType = /*#__PURE__*/function () {
           return GarmentType.findById(req.params.garmentTypeId);
         case 3:
           garmentType = _context4.sent;
-          console.log(garmentType);
-          _context4.next = 7;
+          _context4.next = 6;
           return garmentType.remove();
-        case 7:
+        case 6:
           res.json({
             message: "GarmenType deleted"
           });
-          _context4.next = 14;
+          _context4.next = 13;
           break;
-        case 10:
-          _context4.prev = 10;
+        case 9:
+          _context4.prev = 9;
           _context4.t0 = _context4["catch"](0);
           console.error(_context4.t0);
           res.status(500).json({
             message: "Server error"
           });
-        case 14:
+        case 13:
         case "end":
           return _context4.stop();
       }
-    }, _callee4, null, [[0, 10]]);
+    }, _callee4, null, [[0, 9]]);
   }));
   return function deleteGarmentType(_x7, _x8) {
     return _ref4.apply(this, arguments);

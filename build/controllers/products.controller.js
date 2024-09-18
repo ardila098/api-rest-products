@@ -88,6 +88,7 @@ var createProduct = exports.createProduct = /*#__PURE__*/function () {
             stock: req.body.stock,
             reference: req.body.reference,
             pieces: pieces,
+            discountPercentage: req.body.discountPercentage,
             imgs: imgs
           });
           _context.prev = 35;
@@ -217,54 +218,55 @@ var updateProductById = exports.updateProductById = /*#__PURE__*/function () {
           existingProduct.garmentType = req.body.garmentType;
           existingProduct.pieces = pieces;
           existingProduct.reference = req.body.reference;
+          existingProduct.discountPercentage = req.body.discountPercentage;
           newImgs = [];
           _iterator2 = _createForOfIteratorHelper(req.files);
-          _context4.prev = 19;
+          _context4.prev = 20;
           _iterator2.s();
-        case 21:
+        case 22:
           if ((_step2 = _iterator2.n()).done) {
-            _context4.next = 41;
+            _context4.next = 42;
             break;
           }
           file = _step2.value;
           url = file.path.replace(/\\/g, "/");
-          _context4.prev = 24;
-          _context4.next = 27;
+          _context4.prev = 25;
+          _context4.next = 28;
           return (0, _sharp["default"])(file.path).sharpen().toBuffer();
-        case 27:
+        case 28:
           sharpenedBuffer = _context4.sent;
           sharpenedUrl = "".concat(file.filename);
           savePath = _path["default"].join(__dirname, "path", "to", "save", sharpenedUrl);
           _fs["default"].mkdirSync(_path["default"].dirname(savePath), {
             recursive: true
           });
-          _context4.next = 33;
+          _context4.next = 34;
           return (0, _sharp["default"])(sharpenedBuffer).toFile(savePath);
-        case 33:
+        case 34:
           newImgs.push({
             url: sharpenedUrl
           });
-          _context4.next = 39;
+          _context4.next = 40;
           break;
-        case 36:
-          _context4.prev = 36;
-          _context4.t0 = _context4["catch"](24);
+        case 37:
+          _context4.prev = 37;
+          _context4.t0 = _context4["catch"](25);
           console.error("Error processing image:", _context4.t0);
-        case 39:
-          _context4.next = 21;
+        case 40:
+          _context4.next = 22;
           break;
-        case 41:
-          _context4.next = 46;
+        case 42:
+          _context4.next = 47;
           break;
-        case 43:
-          _context4.prev = 43;
-          _context4.t1 = _context4["catch"](19);
+        case 44:
+          _context4.prev = 44;
+          _context4.t1 = _context4["catch"](20);
           _iterator2.e(_context4.t1);
-        case 46:
-          _context4.prev = 46;
+        case 47:
+          _context4.prev = 47;
           _iterator2.f();
-          return _context4.finish(46);
-        case 49:
+          return _context4.finish(47);
+        case 50:
           existingImgs = req.body.existingImgs || [];
           existingImgsIds = existingProduct.imgs.map(function (img) {
             return img._id.toString();
@@ -273,16 +275,16 @@ var updateProductById = exports.updateProductById = /*#__PURE__*/function () {
             return existingImgs.includes(existingImgsIds[index]);
           });
           existingProduct.imgs = [].concat(_toConsumableArray(updatedImgs), newImgs);
-          _context4.next = 55;
+          _context4.next = 56;
           return existingProduct.save();
-        case 55:
+        case 56:
           savedProduct = _context4.sent;
           res.status(200).json(savedProduct);
-        case 57:
+        case 58:
         case "end":
           return _context4.stop();
       }
-    }, _callee4, null, [[19, 43, 46, 49], [24, 36]]);
+    }, _callee4, null, [[20, 44, 47, 50], [25, 37]]);
   }));
   return function updateProductById(_x7, _x8) {
     return _ref4.apply(this, arguments);

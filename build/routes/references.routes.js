@@ -16,6 +16,5 @@ router.get("/", referencesCrtl.getReferences);
 // router.get("/:referenceId", referencesCrtl.getReferenceById);
 
 router.put("/:referenceId", referencesCrtl.updateReference);
-
-// router.delete("/:referenceId", referencesCrtl.deleteReference);
+router["delete"]("/:referenceId", referencesCrtl.deleteReference);
 var _default = exports["default"] = router;
