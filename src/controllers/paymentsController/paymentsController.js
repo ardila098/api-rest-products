@@ -22,7 +22,7 @@ export const proccesPayment = async (req, res) => {
       pending: "api.lenceriaverona.com:api/payment/pendign",
     },
     notification_url:
-      "https://7b2b-186-80-28-30.ngrok-free.app/api/payment/webhook",
+      "api.lenceriaverona.com/api/payment/webhook",
   });
 
   res.send(result.body);

@@ -33,7 +33,7 @@ var proccesPayment = exports.proccesPayment = /*#__PURE__*/function () {
               failure: "api.lenceriaverona.com:api/payment/failure",
               pending: "api.lenceriaverona.com:api/payment/pendign"
             },
-            notification_url: "https://7b2b-186-80-28-30.ngrok-free.app/api/payment/webhook"
+            notification_url: "api.lenceriaverona.com/api/payment/webhook"
           });
         case 4:
           result = _context.sent;
