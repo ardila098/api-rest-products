@@ -7,7 +7,7 @@ export const proccesPayment = async (req, res) => {
 
   mercadopago.configure({
     access_token:
-      "APP_USR-1842522987172368-080421-15c1260292841fe49b05f92e9b5dcb4e-1929968217",
+      "TEST-3790003707776555-092520-ab34c9a82265eb47d8d12b8c2f70c2b9-628545449",
   });
   const result = await mercadopago.preferences.create({
     items: req.body.items,
