@@ -10,13 +10,11 @@ function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 var nodeMailer = require("nodemailer");
 var sentEmails = exports.sentEmails = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(req, res) {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(data) {
     var transporter, mail;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
-          console.log(req);
-          console.log("correo full");
           transporter = nodeMailer.createTransport({
             host: "smtp.gmail.com",
             port: "465",
@@ -24,36 +22,32 @@ var sentEmails = exports.sentEmails = /*#__PURE__*/function () {
             auth: {
               user: "ardilajr098@gmail.com",
               pass: "dodnrtogblrgizij"
-              // pass: "eodkxkcgxsailwki",
             }
           });
           mail = {
-            from: "",
-            to: req.email,
-            subjet: "client verona",
-            Text: "Verificacion de compra verona",
-            html: "\n    <div>\n         <div>  <span>   name :  ".concat(req.description, "</span>    </div>\n            \n              </div>\n              ")
+            from: "ardilajr098@gmail.com",
+            // Añadir aquí tu dirección de correo
+            to: data.email,
+            subject: "Verificación de compra Verona",
+            // Corrección aquí
+            text: "Verificación de compra Verona",
+            // Cambiar a "text" en lugar de "Text"
+            html: "<div><div><span>Name: ".concat(data.description, "</span></div></div>")
           };
           transporter.sendMail(mail, function (error, info) {
             if (error) {
-              console.log("error sending email", error);
-              res.status(500).json({
-                error: error.message
-              });
+              console.log("Error sending email", error);
             } else {
-              console.log("error sent");
-              res.status(200).json({
-                message: "email send"
-              });
+              console.log("Email sent:", info.response);
             }
           });
-        case 5:
+        case 3:
         case "end":
           return _context.stop();
       }
     }, _callee);
   }));
-  return function sentEmails(_x, _x2) {
+  return function sentEmails(_x) {
     return _ref.apply(this, arguments);
   };
 }();

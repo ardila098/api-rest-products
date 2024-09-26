@@ -1,6 +1,7 @@
 import mercadopago from "mercadopago";
 import Order from "../../models/orders/Orders";
 import { sentEmails } from "../sentEmails.controller";
+import { PAYMENT_STATUS } from "../../constants/orderConstants";
 
 export const proccesPayment = async (req, res) => {
   console.log(req.body);
@@ -21,8 +22,7 @@ export const proccesPayment = async (req, res) => {
       failure: "api.lenceriaverona.com:api/payment/failure",
       pending: "api.lenceriaverona.com:api/payment/pendign",
     },
-    notification_url:
-      "api.lenceriaverona.com/api/payment/webhook",
+    notification_url: "api.lenceriaverona.com/api/payment/webhook",
   });
 
   res.send(result.body);
@@ -56,19 +56,19 @@ export const reciveWebhook = async (req, res) => {
       };
 
       if (statusPayment === "approved") {
-        order.paymentStatus = 2;
+        order.paymentStatus = PAYMENT_STATUS.PAYMENT_CONFIRMED.id; 
         dataEmail.email = order.email;
-        dataEmail.description = "Compra realizada con exito";
+        dataEmail.description = "Compra realizada con éxito";
       } else if (statusPayment === "rejected") {
-        order.paymentStatus = 3;
+        order.paymentStatus = PAYMENT_STATUS.PAYMENT_REJECTED.id; 
         dataEmail.email = order.email;
-        dataEmail.description = "Tu Pago genero error";
+        dataEmail.description = "Tu Pago generó error";
       }
 
       const updatedOrder = await order.save();
       console.log("Order updated:", updatedOrder);
 
-      sentEmails(dataEmail);
+      await sentEmails(dataEmail); 
 
       return res.status(201).json(updatedOrder);
     }
@@ -77,6 +77,7 @@ export const reciveWebhook = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
 
 export const createOrders = async (req, res) => {
   console.log(req.body);
