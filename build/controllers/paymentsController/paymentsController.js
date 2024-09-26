@@ -31,8 +31,8 @@ var proccesPayment = exports.proccesPayment = /*#__PURE__*/function () {
             },
             back_urls: {
               success: "api.lenceriaverona.com/api/payment/success",
-              failure: "api.lenceriaverona.com:api/payment/failure",
-              pending: "api.lenceriaverona.com:api/payment/pendign"
+              failure: "api.lenceriaverona.com/api/payment/failure",
+              pending: "api.lenceriaverona.com/api/payment/pendign"
             },
             notification_url: "api.lenceriaverona.com/api/payment/webhook"
           });
