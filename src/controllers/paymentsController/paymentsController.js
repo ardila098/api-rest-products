@@ -15,9 +15,9 @@ export const processPayment = async (req, res) => {
         email: req.body.email,
       },
       back_urls: {
-        success: `${process.env.API_BASE_URL}/api/payment/success`,
-        failure: `${process.env.API_BASE_URL}/api/payment/failure`,
-        pending: `${process.env.API_BASE_URL}/api/payment/pending`,
+        success: `${process.env.API_BASE_URL}/payment/success`,
+        failure: `${process.env.API_BASE_URL}/payment/failure`,
+        pending: `${process.env.API_BASE_URL}/payment/pending`,
       },
       notification_url: `${process.env.API_BASE_URL}/api/payment/webhook`,
     });

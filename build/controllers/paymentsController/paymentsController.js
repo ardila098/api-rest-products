@@ -30,9 +30,9 @@ var processPayment = exports.processPayment = /*#__PURE__*/function () {
               email: req.body.email
             },
             back_urls: {
-              success: "".concat(process.env.API_BASE_URL, "/api/payment/success"),
-              failure: "".concat(process.env.API_BASE_URL, "/api/payment/failure"),
-              pending: "".concat(process.env.API_BASE_URL, "/api/payment/pending")
+              success: "".concat(process.env.API_BASE_URL, "/payment/success"),
+              failure: "".concat(process.env.API_BASE_URL, "/payment/failure"),
+              pending: "".concat(process.env.API_BASE_URL, "/payment/pending")
             },
             notification_url: "".concat(process.env.API_BASE_URL, "/api/payment/webhook")
           });
