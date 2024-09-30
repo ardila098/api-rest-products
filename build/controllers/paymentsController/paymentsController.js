@@ -126,7 +126,7 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
           updatedOrder = _context2.sent;
           console.log("Order updated:", updatedOrder);
           _context2.next = 39;
-          return (0, _sentEmails.sentEmails)(dataEmail);
+          return (0, _sentEmails.sendEmail)(dataEmail);
         case 39:
           return _context2.abrupt("return", res.status(200).json(updatedOrder));
         case 40:

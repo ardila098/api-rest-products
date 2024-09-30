@@ -1,6 +1,6 @@
 import mercadopago from "mercadopago";
 import Order from "../../models/orders/Orders";
-import { sentEmails } from "../sentEmails.controller";
+import { sendEmail } from "../sentEmails.controller";
 import { PAYMENT_STATUS } from "../../constants/orderConstants";
 
 export const processPayment = async (req, res) => {
@@ -79,7 +79,7 @@ export const receiveWebhook = async (req, res) => {
       const updatedOrder = await order.save();
       console.log("Order updated:", updatedOrder);
 
-      await sentEmails(dataEmail);
+      await sendEmail(dataEmail);
 
       return res.status(200).json(updatedOrder);
     }
