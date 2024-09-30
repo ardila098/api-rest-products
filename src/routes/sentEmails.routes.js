@@ -3,7 +3,7 @@ const router = Router();
 
 import * as sentEmailsCrtl from "../controllers/sentEmails.controller";
 
-router.post("/", sentEmailsCrtl.sentEmails);
+router.post("/", sentEmailsCrtl.sendEmail);
 
 // router.get("/", sentEmailsCrtl.getsentEmails);
 
