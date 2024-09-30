@@ -27,7 +27,7 @@ var proccesPayment = exports.proccesPayment = /*#__PURE__*/function () {
           return _mercadopago["default"].preferences.create({
             items: req.body.items,
             payer: {
-              email: "ardilajr098@gmail.com"
+              email: req.body.email
             },
             back_urls: {
               success: "api.lenceriaverona.com/api/payment/success",

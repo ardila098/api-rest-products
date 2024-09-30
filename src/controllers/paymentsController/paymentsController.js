@@ -14,7 +14,7 @@ export const proccesPayment = async (req, res) => {
     items: req.body.items,
 
     payer: {
-      email: "ardilajr098@gmail.com",
+      email: req.body.email,
     },
 
     back_urls: {
@@ -56,11 +56,11 @@ export const reciveWebhook = async (req, res) => {
       };
 
       if (statusPayment === "approved") {
-        order.paymentStatus = PAYMENT_STATUS.PAYMENT_CONFIRMED.id; 
+        order.paymentStatus = PAYMENT_STATUS.PAYMENT_CONFIRMED.id;
         dataEmail.email = order.email;
         dataEmail.description = "Compra realizada con éxito";
       } else if (statusPayment === "rejected") {
-        order.paymentStatus = PAYMENT_STATUS.PAYMENT_REJECTED.id; 
+        order.paymentStatus = PAYMENT_STATUS.PAYMENT_REJECTED.id;
         dataEmail.email = order.email;
         dataEmail.description = "Tu Pago generó error";
       }
@@ -68,7 +68,7 @@ export const reciveWebhook = async (req, res) => {
       const updatedOrder = await order.save();
       console.log("Order updated:", updatedOrder);
 
-      await sentEmails(dataEmail); 
+      await sentEmails(dataEmail);
 
       return res.status(201).json(updatedOrder);
     }
@@ -77,7 +77,6 @@ export const reciveWebhook = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
-
 
 export const createOrders = async (req, res) => {
   console.log(req.body);

@@ -29,9 +29,7 @@ var sentEmails = exports.sentEmails = /*#__PURE__*/function () {
             // Añadir aquí tu dirección de correo
             to: data.email,
             subject: "Verificación de compra Verona",
-            // Corrección aquí
             text: "Verificación de compra Verona",
-            // Cambiar a "text" en lugar de "Text"
             html: "<div><div><span>Name: ".concat(data.description, "</span></div></div>")
           };
           transporter.sendMail(mail, function (error, info) {

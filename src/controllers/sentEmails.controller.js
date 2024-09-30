@@ -14,8 +14,8 @@ export const sentEmails = async (data) => {
   let mail = {
     from: "ardilajr098@gmail.com", // Añadir aquí tu dirección de correo
     to: data.email,
-    subject: "Verificación de compra Verona", // Corrección aquí
-    text: "Verificación de compra Verona", // Cambiar a "text" en lugar de "Text"
+    subject: "Verificación de compra Verona", 
+    text: "Verificación de compra Verona", 
     html: `<div><div><span>Name: ${data.description}</span></div></div>`,
   };
 
