@@ -14,7 +14,7 @@ export const proccesPayment = async (req, res) => {
     items: req.body.items,
 
     payer: {
-      email: "ardilajr@gmail.com",
+      email: "ardilajr098@gmail.com",
     },
 
     back_urls: {
