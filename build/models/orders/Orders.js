@@ -31,16 +31,8 @@ var orderSchema = new _mongoose.Schema({
     }
   },
   celphone: {
-    type: String,
-    required: true,
-    validate: {
-      validator: function validator(v) {
-        return /^[0-9]{10}$/.test(v);
-      },
-      message: function message(props) {
-        return "".concat(props.value, " no es un n\xFAmero de tel\xE9fono v\xE1lido!");
-      }
-    }
+    type: Number,
+    required: true
   },
   department: {
     type: String,

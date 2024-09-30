@@ -16,16 +16,7 @@ const orderSchema = new Schema({
       message: props => `${props.value} no es un correo electrónico válido!`,
     },
   },
-  celphone: { 
-    type: String, 
-    required: true,
-    validate: {
-      validator: function(v) {
-        return /^[0-9]{10}$/.test(v);
-      },
-      message: props => `${props.value} no es un número de teléfono válido!`,
-    },
-  },
+  celphone: { type: Number, required: true },
   department: { type: String, trim: true },
   city: { type: String, trim: true },
   address: { type: String, trim: true },
