@@ -19,7 +19,7 @@ export const processPayment = async (req, res) => {
         failure: `${process.env.API_BASE_URL}/payment/failure`,
         pending: `${process.env.API_BASE_URL}/payment/pending`,
       },
-      notification_url: `${process.env.API_BASE_URL}/api/payment/webhook`,
+      notification_url: `${process.env.API_BASE_URL}/payment/webhook`,
     });
 
     res.status(200).json(result.body);

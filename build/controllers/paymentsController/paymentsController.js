@@ -34,7 +34,7 @@ var processPayment = exports.processPayment = /*#__PURE__*/function () {
               failure: "".concat(process.env.API_BASE_URL, "/payment/failure"),
               pending: "".concat(process.env.API_BASE_URL, "/payment/pending")
             },
-            notification_url: "".concat(process.env.API_BASE_URL, "/api/payment/webhook")
+            notification_url: "".concat(process.env.API_BASE_URL, "/payment/webhook")
           });
         case 4:
           result = _context.sent;
