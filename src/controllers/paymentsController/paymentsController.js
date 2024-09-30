@@ -3,41 +3,38 @@ import Order from "../../models/orders/Orders";
 import { sentEmails } from "../sentEmails.controller";
 import { PAYMENT_STATUS } from "../../constants/orderConstants";
 
-export const proccesPayment = async (req, res) => {
-  console.log(req.body);
+export const processPayment = async (req, res) => {
+  try {
+    mercadopago.configure({
+      access_token: process.env.MERCADOPAGO_ACCESS_TOKEN,
+    });
 
-  mercadopago.configure({
-    access_token:
-      "TEST-3790003707776555-092520-ab34c9a82265eb47d8d12b8c2f70c2b9-628545449",
-  });
-  const result = await mercadopago.preferences.create({
-    items: req.body.items,
+    const result = await mercadopago.preferences.create({
+      items: req.body.items,
+      payer: {
+        email: req.body.email,
+      },
+      back_urls: {
+        success: `${process.env.API_BASE_URL}/api/payment/success`,
+        failure: `${process.env.API_BASE_URL}/api/payment/failure`,
+        pending: `${process.env.API_BASE_URL}/api/payment/pending`,
+      },
+      notification_url: `${process.env.API_BASE_URL}/api/payment/webhook`,
+    });
 
-    payer: {
-      email: req.body.email,
-    },
-
-    back_urls: {
-      success: "api.lenceriaverona.com/api/payment/success",
-      failure: "api.lenceriaverona.com/api/payment/failure",
-      pending: "api.lenceriaverona.com/api/payment/pendign",
-    },
-    notification_url: "api.lenceriaverona.com/api/payment/webhook",
-  });
-
-  res.send(result.body);
-  console.log(result);
+    res.status(200).json(result.body);
+  } catch (error) {
+    console.error("Error processing payment:", error);
+    res.status(500).json({ error: "Error processing payment" });
+  }
 };
 
-export const reciveWebhook = async (req, res) => {
+export const receiveWebhook = async (req, res) => {
   const payment = req.query;
 
-  console.log("datapayment", payment);
   try {
     if (payment.type === "payment") {
       const data = await mercadopago.payment.findById(payment["data.id"]);
-      console.log("data", data);
-
       const collectorId = data.body.collector_id;
       const statusPayment = data.body.status;
 
@@ -48,46 +45,34 @@ export const reciveWebhook = async (req, res) => {
         return res.status(404).json({ error: "Order not found" });
       }
 
-      console.log("Order found:", order);
-
       const dataEmail = {
-        email: "",
-        description: "",
+        email: order.email,
+        description: statusPayment === "approved" ? "Compra realizada con éxito" : "Tu Pago generó error",
       };
 
-      if (statusPayment === "approved") {
-        order.paymentStatus = PAYMENT_STATUS.PAYMENT_CONFIRMED.id;
-        dataEmail.email = order.email;
-        dataEmail.description = "Compra realizada con éxito";
-      } else if (statusPayment === "rejected") {
-        order.paymentStatus = PAYMENT_STATUS.PAYMENT_REJECTED.id;
-        dataEmail.email = order.email;
-        dataEmail.description = "Tu Pago generó error";
-      }
+      order.paymentStatus = statusPayment === "approved" 
+        ? PAYMENT_STATUS.PAYMENT_CONFIRMED.id 
+        : PAYMENT_STATUS.PAYMENT_REJECTED.id;
 
       const updatedOrder = await order.save();
-      console.log("Order updated:", updatedOrder);
 
       await sentEmails(dataEmail);
 
-      return res.status(201).json(updatedOrder);
+      return res.status(200).json(updatedOrder);
     }
   } catch (error) {
-    console.log(error);
+    console.error("Error processing webhook:", error);
     return res.status(500).json({ error: error.message });
   }
 };
 
-export const createOrders = async (req, res) => {
-  console.log(req.body);
-
-  const newOrder = new Order(req.body);
-
+export const createOrder = async (req, res) => {
   try {
+    const newOrder = new Order(req.body);
     const savedOrder = await newOrder.save();
     res.status(201).json(savedOrder);
   } catch (error) {
-    console.error("Error saving order:", error);
+    console.error("Error creating order:", error);
     res.status(500).json({ error: "Error creating order" });
   }
 };

@@ -1,67 +1,68 @@
 import { Schema, model } from "mongoose";
+import { PAYMENT_STATUS, SHIPPING_STATUS } from "../../constants/orderConstants";
 
-import {
-  PAYMENT_STATUS,
-  SHIPPING_STATUS,
-} from "../../constants/orderConstants";
-
-const orderSchema = new Schema(
-  {
-    name: { type: String, required: true },
-    description: { type: String, required: false },
-    email: {
-      type: String,
-      required: true,
-      validate: {
-        validator: function (v) {
-          return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(v);
-        },
-        message: (props) =>
-          `${props.value} no es un correo electrónico válido!`,
+const orderSchema = new Schema({
+  name: { type: String, required: true, trim: true },
+  description: { type: String, trim: true },
+  email: {
+    type: String,
+    required: true,
+    lowercase: true,
+    trim: true,
+    validate: {
+      validator: function (v) {
+        return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(v);
       },
-    },
-    celphone: { type: Number, required: true },
-    department: { type: String, required: false },
-    city: { type: String, required: false },
-    address: { type: String, required: false },
-    district: { type: String, required: false },
-    paymentId: { type: String, required: false },
-    client_id: { type: String, required: false },
-    collector_id: { type: String, required: false },
-    terms: { type: Boolean, required: true },
-    items: [
-      {
-        _id: {
-          type: Schema.Types.ObjectId,
-          ref: "Product",
-          required: true,
-        },
-        totalPrice: { type: Number, required: true },
-        count: { type: Number, required: true },
-        imgs: [{ type: Schema.Types.Mixed }],
-        selectedPieces: [
-          {
-            pieceId: String,
-            namePiece: String,
-            nameSize: String,
-            sizeId: String,
-          },
-        ],
-      },
-    ],
-    paymentStatus: {
-      type: Number,
-      default: PAYMENT_STATUS.PENDING_PAYMENT.id,
-    },
-    sendStatus: {
-      type: Number,
-      default: SHIPPING_STATUS.PENDING_SEND.id,
+      message: props => `${props.value} no es un correo electrónico válido!`,
     },
   },
-  {
-    timestamps: true,
-    versionKey: false,
-  }
-);
+  celphone: { 
+    type: String, 
+    required: true,
+    validate: {
+      validator: function(v) {
+        return /^[0-9]{10}$/.test(v);
+      },
+      message: props => `${props.value} no es un número de teléfono válido!`,
+    },
+  },
+  department: { type: String, trim: true },
+  city: { type: String, trim: true },
+  address: { type: String, trim: true },
+  district: { type: String, trim: true },
+  paymentId: { type: String },
+  client_id: { type: String },
+  collector_id: { type: String },
+  terms: { type: Boolean, required: true },
+  items: [{
+    _id: {
+      type: Schema.Types.ObjectId,
+      ref: "Product",
+      required: true,
+    },
+    totalPrice: { type: Number, required: true, min: 0 },
+    count: { type: Number, required: true, min: 1 },
+    imgs: [{ type: Schema.Types.Mixed }],
+    selectedPieces: [{
+      pieceId: String,
+      namePiece: String,
+      nameSize: String,
+      sizeId: String,
+    }],
+  }],
+  paymentStatus: {
+    type: Number,
+    default: PAYMENT_STATUS.PENDING_PAYMENT.id,
+    enum: Object.values(PAYMENT_STATUS).map(status => status.id),
+  },
+  sendStatus: {
+    type: Number,
+    default: SHIPPING_STATUS.PENDING_SEND.id,
+    enum: Object.values(SHIPPING_STATUS).map(status => status.id),
+  },
+}, {
+  timestamps: true,
+  versionKey: false,
+});
 
 export default model("Order", orderSchema);

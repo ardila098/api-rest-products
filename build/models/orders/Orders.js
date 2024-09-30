@@ -9,18 +9,21 @@ var _orderConstants = require("../../constants/orderConstants");
 var orderSchema = new _mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   description: {
     type: String,
-    required: false
+    trim: true
   },
   email: {
     type: String,
     required: true,
+    lowercase: true,
+    trim: true,
     validate: {
       validator: function validator(v) {
-        return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(v);
+        return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(v);
       },
       message: function message(props) {
         return "".concat(props.value, " no es un correo electr\xF3nico v\xE1lido!");
@@ -28,36 +31,41 @@ var orderSchema = new _mongoose.Schema({
     }
   },
   celphone: {
-    type: Number,
-    required: true
+    type: String,
+    required: true,
+    validate: {
+      validator: function validator(v) {
+        return /^[0-9]{10}$/.test(v);
+      },
+      message: function message(props) {
+        return "".concat(props.value, " no es un n\xFAmero de tel\xE9fono v\xE1lido!");
+      }
+    }
   },
   department: {
     type: String,
-    required: false
+    trim: true
   },
   city: {
     type: String,
-    required: false
+    trim: true
   },
   address: {
     type: String,
-    required: false
+    trim: true
   },
   district: {
     type: String,
-    required: false
+    trim: true
   },
   paymentId: {
-    type: String,
-    required: false
+    type: String
   },
   client_id: {
-    type: String,
-    required: false
+    type: String
   },
   collector_id: {
-    type: String,
-    required: false
+    type: String
   },
   terms: {
     type: Boolean,
@@ -71,11 +79,13 @@ var orderSchema = new _mongoose.Schema({
     },
     totalPrice: {
       type: Number,
-      required: true
+      required: true,
+      min: 0
     },
     count: {
       type: Number,
-      required: true
+      required: true,
+      min: 1
     },
     imgs: [{
       type: _mongoose.Schema.Types.Mixed
@@ -89,11 +99,17 @@ var orderSchema = new _mongoose.Schema({
   }],
   paymentStatus: {
     type: Number,
-    "default": _orderConstants.PAYMENT_STATUS.PENDING_PAYMENT.id
+    "default": _orderConstants.PAYMENT_STATUS.PENDING_PAYMENT.id,
+    "enum": Object.values(_orderConstants.PAYMENT_STATUS).map(function (status) {
+      return status.id;
+    })
   },
   sendStatus: {
     type: Number,
-    "default": _orderConstants.SHIPPING_STATUS.PENDING_SEND.id
+    "default": _orderConstants.SHIPPING_STATUS.PENDING_SEND.id,
+    "enum": Object.values(_orderConstants.SHIPPING_STATUS).map(function (status) {
+      return status.id;
+    })
   }
 }, {
   timestamps: true,
