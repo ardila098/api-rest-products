@@ -31,30 +31,53 @@ export const processPayment = async (req, res) => {
 
 export const receiveWebhook = async (req, res) => {
   const payment = req.query;
+  console.log("Webhook received:", payment);
 
   try {
     if (payment.type === "payment") {
       const data = await mercadopago.payment.findById(payment["data.id"]);
+      console.log("Payment data:", data.body);
+
       const collectorId = data.body.collector_id;
       const statusPayment = data.body.status;
 
       const order = await Order.findOne({ collector_id: collectorId });
 
       if (!order) {
-        console.log("Order not found");
+        console.log("Order not found for collector_id:", collectorId);
         return res.status(404).json({ error: "Order not found" });
+      }
+
+      console.log("Order found:", order);
+
+      let emailDescription = "";
+      switch (statusPayment) {
+        case "approved":
+          order.paymentStatus = PAYMENT_STATUS.PAYMENT_CONFIRMED.id;
+          emailDescription = "Compra realizada con éxito";
+          break;
+        case "rejected":
+          order.paymentStatus = PAYMENT_STATUS.PAYMENT_REJECTED.id;
+          emailDescription =
+            "Tu pago fue rechazado. Por favor, intenta con otro método de pago.";
+          break;
+        case "pending":
+          order.paymentStatus = PAYMENT_STATUS.PENDING_PAYMENT.id;
+          emailDescription =
+            "Tu pago está pendiente. Te notificaremos cuando se confirme.";
+          break;
+        default:
+          console.log("Unexpected payment status:", statusPayment);
+          return res.status(400).json({ error: "Unexpected payment status" });
       }
 
       const dataEmail = {
         email: order.email,
-        description: statusPayment === "approved" ? "Compra realizada con éxito" : "Tu Pago generó error",
+        description: emailDescription,
       };
 
-      order.paymentStatus = statusPayment === "approved" 
-        ? PAYMENT_STATUS.PAYMENT_CONFIRMED.id 
-        : PAYMENT_STATUS.PAYMENT_REJECTED.id;
-
       const updatedOrder = await order.save();
+      console.log("Order updated:", updatedOrder);
 
       await sentEmails(dataEmail);
 
@@ -62,7 +85,9 @@ export const receiveWebhook = async (req, res) => {
     }
   } catch (error) {
     console.error("Error processing webhook:", error);
-    return res.status(500).json({ error: error.message });
+    return res
+      .status(500)
+      .json({ error: "Error processing webhook", details: error.message });
   }
 };
 
