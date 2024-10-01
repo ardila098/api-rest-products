@@ -16,6 +16,7 @@ var sendEmail = exports.sendEmail = /*#__PURE__*/function () {
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
+          console.log(data);
           transporter = _nodemailer["default"].createTransport({
             host: "smtp.gmail.com",
             port: 465,
@@ -32,23 +33,23 @@ var sendEmail = exports.sendEmail = /*#__PURE__*/function () {
             text: data.description,
             html: "<div><h1>Verificaci\xF3n de compra Verona</h1><p>".concat(data.description, "</p></div>")
           };
-          _context.prev = 2;
-          _context.next = 5;
+          _context.prev = 3;
+          _context.next = 6;
           return transporter.sendMail(mailOptions);
-        case 5:
+        case 6:
           info = _context.sent;
           console.log("Email sent:", info.response);
           return _context.abrupt("return", info);
-        case 10:
-          _context.prev = 10;
-          _context.t0 = _context["catch"](2);
+        case 11:
+          _context.prev = 11;
+          _context.t0 = _context["catch"](3);
           console.error("Error sending email:", _context.t0);
           throw _context.t0;
-        case 14:
+        case 15:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[2, 10]]);
+    }, _callee, null, [[3, 11]]);
   }));
   return function sendEmail(_x) {
     return _ref.apply(this, arguments);
