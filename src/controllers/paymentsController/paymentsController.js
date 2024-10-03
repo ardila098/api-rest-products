@@ -31,39 +31,19 @@ export const processPayment = async (req, res) => {
 };
 
 export const receiveWebhook = async (req, res) => {
-  const payment = req.query;
+  const payment = req.body;
 
-  console.log('req.body 36',req.body)
+  console.log("req.body 36", req.body);
 
   try {
     if (payment.type === "payment") {
       const data = await mercadopago.payment.findById(payment["data.id"]);
-      console.log('data 41' , data);
-      // const {
-      //   name,
-      //   email,
-      //   celphone,
-      //   department,
-      //   city,
-      //   district,
-      //   address,
-      //   description,
-      //   terms,
-      // } = data.body.metadata;
+      console.log("data 41", data);
 
-      const order = new Order(
-        req.body.metadata
-        // name: name || "Nombre no disponible",
-        // email: email || "Email no disponible",
-        // celphone: celphone || "Celular no disponible",
-        // department: department || "Departamento no disponible",
-        // city: city || "Ciudad no disponible",
-        // district: district || "Distrito no disponible",
-        // address: address || "Dirección no disponible",
-        // description: description || "Descripción no disponible",
-        // terms: terms || false,
-        // Agrega otros campos necesarios según tu modelo
-      );
+      const order = new Order({
+        ...data.body.metadata,
+        paymentId: payment.id,
+      });
 
       await order.save();
       return res.status(200).json({ status: "success" });
