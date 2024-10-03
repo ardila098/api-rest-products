@@ -68,53 +68,47 @@ var processPayment = exports.processPayment = /*#__PURE__*/function () {
 }();
 var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
   var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(req, res) {
-    var payment, paymentId, data, order;
+    var payment, data, order;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
           payment = req.body;
           console.log("req.body 36", req.body);
           _context2.prev = 2;
-          if (!(payment.type === "payment" && payment.data && payment.data.id)) {
-            _context2.next = 15;
+          if (!(payment.type === "payment")) {
+            _context2.next = 12;
             break;
           }
-          paymentId = payment.data.id;
-          _context2.next = 7;
-          return _mercadopago["default"].payment.findById(paymentId);
-        case 7:
+          _context2.next = 6;
+          return _mercadopago["default"].payment.findById(payment.data.id);
+        case 6:
           data = _context2.sent;
           console.log("data 41", data);
           order = new _Orders["default"](_objectSpread(_objectSpread({}, data.body.metadata), {}, {
             paymentId: payment.id
           }));
-          _context2.next = 12;
+          _context2.next = 11;
           return order.save();
-        case 12:
+        case 11:
           return _context2.abrupt("return", res.status(200).json({
             status: "success"
           }));
-        case 15:
-          console.error("Invalid payment data:", payment);
-          return _context2.abrupt("return", res.status(400).json({
-            error: "Invalid payment data"
-          }));
-        case 17:
-          _context2.next = 23;
+        case 12:
+          _context2.next = 18;
           break;
-        case 19:
-          _context2.prev = 19;
+        case 14:
+          _context2.prev = 14;
           _context2.t0 = _context2["catch"](2);
           console.error("Error processing webhook:", _context2.t0);
           return _context2.abrupt("return", res.status(500).json({
             error: "Error processing webhook",
             details: _context2.t0.message
           }));
-        case 23:
+        case 18:
         case "end":
           return _context2.stop();
       }
-    }, _callee2, null, [[2, 19]]);
+    }, _callee2, null, [[2, 14]]);
   }));
   return function receiveWebhook(_x3, _x4) {
     return _ref2.apply(this, arguments);

@@ -36,10 +36,8 @@ export const receiveWebhook = async (req, res) => {
   console.log("req.body 36", req.body);
 
   try {
-    if (payment.type === "payment" && payment.data && payment.data.id) {
-      const paymentId = payment.data.id; 
-      const data = await mercadopago.payment.findById(paymentId);
-
+    if (payment.type === "payment") {
+      const data = await mercadopago.payment.findById(payment.data.id);
       console.log("data 41", data);
 
       const order = new Order({
@@ -49,16 +47,14 @@ export const receiveWebhook = async (req, res) => {
 
       await order.save();
       return res.status(200).json({ status: "success" });
-    } else {
-      console.error("Invalid payment data:", payment);
-      return res.status(400).json({ error: "Invalid payment data" });
     }
   } catch (error) {
     console.error("Error processing webhook:", error);
-    return res.status(500).json({ error: "Error processing webhook", details: error.message });
+    return res
+      .status(500)
+      .json({ error: "Error processing webhook", details: error.message });
   }
 };
-
 
 export const createOrder = async (req, res) => {
   try {
