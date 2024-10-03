@@ -38,7 +38,9 @@ var processPayment = exports.processPayment = /*#__PURE__*/function () {
           });
         case 4:
           result = _context.sent;
-          res.status(200).json(result.body);
+          res.status(200).json({
+            init_point: result.body.init_point
+          });
           _context.next = 12;
           break;
         case 8:
@@ -60,7 +62,7 @@ var processPayment = exports.processPayment = /*#__PURE__*/function () {
 }();
 var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
   var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(req, res) {
-    var payment, data, collectorId, statusPayment, order, emailDescription, dataEmail, updatedOrder;
+    var payment, data, statusPayment, order;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
@@ -68,7 +70,7 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
           console.log("Webhook received:", payment);
           _context2.prev = 2;
           if (!(payment.type === "payment")) {
-            _context2.next = 40;
+            _context2.next = 14;
             break;
           }
           _context2.next = 6;
@@ -76,75 +78,44 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
         case 6:
           data = _context2.sent;
           console.log("Payment data:", data.body);
-          collectorId = data.body.collector_id;
           statusPayment = data.body.status;
-          _context2.next = 12;
-          return _Orders["default"].findOne({
-            collector_id: collectorId
+          order = new _Orders["default"]({
+            name: req.body.name,
+            email: req.body.email,
+            celphone: req.body.celphone,
+            department: req.body.department,
+            city: req.body.city,
+            district: req.body.district,
+            address: req.body.address,
+            description: req.body.description,
+            terms: req.body.terms,
+            items: req.body.items,
+            paymentId: data.body.id,
+            paymentStatus: statusPayment === "approved" ? _orderConstants.PAYMENT_STATUS.PAYMENT_CONFIRMED.id : _orderConstants.PAYMENT_STATUS.PAYMENT_REJECTED.id
           });
-        case 12:
-          order = _context2.sent;
-          if (order) {
-            _context2.next = 16;
-            break;
-          }
-          console.log("Order not found for collector_id:", collectorId);
-          return _context2.abrupt("return", res.status(404).json({
-            error: "Order not found"
-          }));
-        case 16:
-          console.log("Order found:", order);
-          emailDescription = "";
-          _context2.t0 = statusPayment;
-          _context2.next = _context2.t0 === "approved" ? 21 : _context2.t0 === "rejected" ? 24 : _context2.t0 === "pending" ? 27 : 30;
-          break;
-        case 21:
-          order.paymentStatus = _orderConstants.PAYMENT_STATUS.PAYMENT_CONFIRMED.id;
-          emailDescription = "Compra realizada con éxito";
-          return _context2.abrupt("break", 32);
-        case 24:
-          order.paymentStatus = _orderConstants.PAYMENT_STATUS.PAYMENT_REJECTED.id;
-          emailDescription = "Tu pago fue rechazado. Por favor, intenta con otro método de pago.";
-          return _context2.abrupt("break", 32);
-        case 27:
-          order.paymentStatus = _orderConstants.PAYMENT_STATUS.PENDING_PAYMENT.id;
-          emailDescription = "Tu pago está pendiente. Te notificaremos cuando se confirme.";
-          return _context2.abrupt("break", 32);
-        case 30:
-          console.log("Unexpected payment status:", statusPayment);
-          return _context2.abrupt("return", res.status(400).json({
-            error: "Unexpected payment status"
-          }));
-        case 32:
-          dataEmail = {
-            email: order.email,
-            description: emailDescription
-          };
-          _context2.next = 35;
+          _context2.next = 12;
           return order.save();
-        case 35:
-          updatedOrder = _context2.sent;
-          console.log("Order updated:", updatedOrder);
-          _context2.next = 39;
-          return (0, _sentEmails.sendEmail)(dataEmail);
-        case 39:
-          return _context2.abrupt("return", res.status(200).json(updatedOrder));
-        case 40:
-          _context2.next = 46;
+        case 12:
+          console.log("Order created:", order);
+          return _context2.abrupt("return", res.status(200).json({
+            status: "success"
+          }));
+        case 14:
+          _context2.next = 20;
           break;
-        case 42:
-          _context2.prev = 42;
-          _context2.t1 = _context2["catch"](2);
-          console.error("Error processing webhook:", _context2.t1);
+        case 16:
+          _context2.prev = 16;
+          _context2.t0 = _context2["catch"](2);
+          console.error("Error processing webhook:", _context2.t0);
           return _context2.abrupt("return", res.status(500).json({
             error: "Error processing webhook",
-            details: _context2.t1.message
+            details: _context2.t0.message
           }));
-        case 46:
+        case 20:
         case "end":
           return _context2.stop();
       }
-    }, _callee2, null, [[2, 42]]);
+    }, _callee2, null, [[2, 16]]);
   }));
   return function receiveWebhook(_x3, _x4) {
     return _ref2.apply(this, arguments);
