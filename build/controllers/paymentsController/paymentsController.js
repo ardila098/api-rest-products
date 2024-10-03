@@ -68,16 +68,17 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
           payment = req.query;
-          _context2.prev = 1;
+          console.log('req.body 36', req.body);
+          _context2.prev = 2;
           if (!(payment.type === "payment")) {
-            _context2.next = 11;
+            _context2.next = 12;
             break;
           }
-          _context2.next = 5;
+          _context2.next = 6;
           return _mercadopago["default"].payment.findById(payment["data.id"]);
-        case 5:
+        case 6:
           data = _context2.sent;
-          console.log(data);
+          console.log('data 41', data);
           // const {
           //   name,
           //   email,
@@ -89,7 +90,7 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
           //   description,
           //   terms,
           // } = data.body.metadata;
-          order = new _Orders["default"](data.body.metadata
+          order = new _Orders["default"](req.body.metadata
           // name: name || "Nombre no disponible",
           // email: email || "Email no disponible",
           // celphone: celphone || "Celular no disponible",
@@ -101,28 +102,28 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
           // terms: terms || false,
           // Agrega otros campos necesarios según tu modelo
           );
-          _context2.next = 10;
+          _context2.next = 11;
           return order.save();
-        case 10:
+        case 11:
           return _context2.abrupt("return", res.status(200).json({
             status: "success"
           }));
-        case 11:
-          _context2.next = 17;
+        case 12:
+          _context2.next = 18;
           break;
-        case 13:
-          _context2.prev = 13;
-          _context2.t0 = _context2["catch"](1);
+        case 14:
+          _context2.prev = 14;
+          _context2.t0 = _context2["catch"](2);
           console.error("Error processing webhook:", _context2.t0);
           return _context2.abrupt("return", res.status(500).json({
             error: "Error processing webhook",
             details: _context2.t0.message
           }));
-        case 17:
+        case 18:
         case "end":
           return _context2.stop();
       }
-    }, _callee2, null, [[1, 13]]);
+    }, _callee2, null, [[2, 14]]);
   }));
   return function receiveWebhook(_x3, _x4) {
     return _ref2.apply(this, arguments);

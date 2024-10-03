@@ -33,10 +33,12 @@ export const processPayment = async (req, res) => {
 export const receiveWebhook = async (req, res) => {
   const payment = req.query;
 
+  console.log('req.body 36',req.body)
+
   try {
     if (payment.type === "payment") {
       const data = await mercadopago.payment.findById(payment["data.id"]);
-      console.log(data);
+      console.log('data 41' , data);
       // const {
       //   name,
       //   email,
@@ -50,7 +52,7 @@ export const receiveWebhook = async (req, res) => {
       // } = data.body.metadata;
 
       const order = new Order(
-        data.body.metadata
+        req.body.metadata
         // name: name || "Nombre no disponible",
         // email: email || "Email no disponible",
         // celphone: celphone || "Celular no disponible",

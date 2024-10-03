@@ -53,12 +53,6 @@ var orderSchema = new _mongoose.Schema({
   paymentId: {
     type: String
   },
-  client_id: {
-    type: String
-  },
-  collector_id: {
-    type: String
-  },
   terms: {
     type: Boolean,
     required: true
