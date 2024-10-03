@@ -8,7 +8,8 @@ export const processPayment = async (req, res) => {
     mercadopago.configure({
       access_token: process.env.MERCADOPAGO_ACCESS_TOKEN,
     });
-
+  
+    
     const result = await mercadopago.preferences.create({
       items: req.body.items,
       payer: {
