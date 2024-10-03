@@ -34,7 +34,8 @@ var processPayment = exports.processPayment = /*#__PURE__*/function () {
               failure: "".concat(process.env.API_BASE_URL, "/payment/failure"),
               pending: "".concat(process.env.API_BASE_URL, "/payment/pending")
             },
-            notification_url: "".concat(process.env.API_BASE_URL, "/payment/webhook")
+            notification_url: "".concat(process.env.API_BASE_URL, "/payment/webhook"),
+            metadata: req.body
           });
         case 4:
           result = _context.sent;
@@ -62,60 +63,66 @@ var processPayment = exports.processPayment = /*#__PURE__*/function () {
 }();
 var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
   var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(req, res) {
-    var payment, data, statusPayment, order;
+    var payment, data, order;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
           payment = req.query;
-          console.log("Webhook received:", payment);
-          _context2.prev = 2;
+          _context2.prev = 1;
           if (!(payment.type === "payment")) {
-            _context2.next = 14;
+            _context2.next = 11;
             break;
           }
-          _context2.next = 6;
+          _context2.next = 5;
           return _mercadopago["default"].payment.findById(payment["data.id"]);
-        case 6:
+        case 5:
           data = _context2.sent;
-          console.log("Payment data:", data.body);
-          statusPayment = data.body.status;
-          order = new _Orders["default"]({
-            name: req.body.name,
-            email: req.body.email,
-            celphone: req.body.celphone,
-            department: req.body.department,
-            city: req.body.city,
-            district: req.body.district,
-            address: req.body.address,
-            description: req.body.description,
-            terms: req.body.terms,
-            items: req.body.items,
-            paymentId: data.body.id,
-            paymentStatus: statusPayment === "approved" ? _orderConstants.PAYMENT_STATUS.PAYMENT_CONFIRMED.id : _orderConstants.PAYMENT_STATUS.PAYMENT_REJECTED.id
-          });
-          _context2.next = 12;
+          console.log(data);
+          // const {
+          //   name,
+          //   email,
+          //   celphone,
+          //   department,
+          //   city,
+          //   district,
+          //   address,
+          //   description,
+          //   terms,
+          // } = data.body.metadata;
+          order = new _Orders["default"](data.body.metadata
+          // name: name || "Nombre no disponible",
+          // email: email || "Email no disponible",
+          // celphone: celphone || "Celular no disponible",
+          // department: department || "Departamento no disponible",
+          // city: city || "Ciudad no disponible",
+          // district: district || "Distrito no disponible",
+          // address: address || "Dirección no disponible",
+          // description: description || "Descripción no disponible",
+          // terms: terms || false,
+          // Agrega otros campos necesarios según tu modelo
+          );
+          _context2.next = 10;
           return order.save();
-        case 12:
-          console.log("Order created:", order);
+        case 10:
           return _context2.abrupt("return", res.status(200).json({
             status: "success"
           }));
-        case 14:
-          _context2.next = 20;
+        case 11:
+          _context2.next = 17;
           break;
-        case 16:
-          _context2.prev = 16;
-          _context2.t0 = _context2["catch"](2);
+        case 13:
+          _context2.prev = 13;
+          _context2.t0 = _context2["catch"](1);
           console.error("Error processing webhook:", _context2.t0);
           return _context2.abrupt("return", res.status(500).json({
             error: "Error processing webhook",
             details: _context2.t0.message
           }));
-        case 20:
+        case 17:
         case "end":
           return _context2.stop();
       }
-    }, _callee2, null, [[2, 16]]);
+    }, _callee2, null, [[1, 13]]);
   }));
   return function receiveWebhook(_x3, _x4) {
     return _ref2.apply(this, arguments);

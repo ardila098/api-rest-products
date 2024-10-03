@@ -20,6 +20,7 @@ export const processPayment = async (req, res) => {
         pending: `${process.env.API_BASE_URL}/payment/pending`,
       },
       notification_url: `${process.env.API_BASE_URL}/payment/webhook`,
+      metadata: req.body,
     });
 
     res.status(200).json({ init_point: result.body.init_point });
@@ -29,46 +30,49 @@ export const processPayment = async (req, res) => {
   }
 };
 
-
 export const receiveWebhook = async (req, res) => {
   const payment = req.query;
-  console.log("Webhook received:", payment);
 
   try {
     if (payment.type === "payment") {
       const data = await mercadopago.payment.findById(payment["data.id"]);
-      console.log("Payment data:", data.body);
+      console.log(data);
+      // const {
+      //   name,
+      //   email,
+      //   celphone,
+      //   department,
+      //   city,
+      //   district,
+      //   address,
+      //   description,
+      //   terms,
+      // } = data.body.metadata;
 
-      const statusPayment = data.body.status;
+      const order = new Order(
+        data.body.metadata
+        // name: name || "Nombre no disponible",
+        // email: email || "Email no disponible",
+        // celphone: celphone || "Celular no disponible",
+        // department: department || "Departamento no disponible",
+        // city: city || "Ciudad no disponible",
+        // district: district || "Distrito no disponible",
+        // address: address || "Dirección no disponible",
+        // description: description || "Descripción no disponible",
+        // terms: terms || false,
+        // Agrega otros campos necesarios según tu modelo
+      );
 
-      const order = new Order({
-        name: req.body.name,
-        email: req.body.email,
-        celphone: req.body.celphone,
-        department: req.body.department,
-        city: req.body.city,
-        district: req.body.district,
-        address: req.body.address,
-        description: req.body.description,
-        terms: req.body.terms,
-        items: req.body.items,
-        paymentId: data.body.id,
-        paymentStatus: statusPayment === "approved" ? PAYMENT_STATUS.PAYMENT_CONFIRMED.id : PAYMENT_STATUS.PAYMENT_REJECTED.id,
-      });
       await order.save();
-      console.log("Order created:", order);
-
       return res.status(200).json({ status: "success" });
     }
   } catch (error) {
     console.error("Error processing webhook:", error);
-    return res.status(500).json({ error: "Error processing webhook", details: error.message });
+    return res
+      .status(500)
+      .json({ error: "Error processing webhook", details: error.message });
   }
 };
-
-
-
-
 
 export const createOrder = async (req, res) => {
   try {
