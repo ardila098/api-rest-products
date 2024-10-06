@@ -38,18 +38,21 @@ export const receiveWebhook = async (req, res) => {
   try {
     if (payment.type === "payment") {
       const data = await mercadopago.payment.findById(payment.data.id);
+      const statusPayment = data.body.status;
       console.log("data 41", data);
 
-      const dataUSer = {
+      const dataOrder = {
         ...data.body.metadata,
         paymentId: payment.data.id,
+        paymentStatus:
+          statusPayment === "approved"
+            ? PAYMENT_STATUS.PAYMENT_CONFIRMED.id
+            : PAYMENT_STATUS.PAYMENT_REJECTED.id,
       };
 
-      console.log('dataUser', dataUSer)
-      console.log('dataUser', dataUSer.dataUSer)
+      console.log("dataUser", dataOrder);
 
-
-      const order = new Order(dataUSer.dataUSer);
+      const order = new Order(dataOrder);
 
       await order.save();
       return res.status(200).json({ status: "success" });
