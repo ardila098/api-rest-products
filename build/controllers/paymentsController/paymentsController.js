@@ -30,7 +30,7 @@ var processPayment = exports.processPayment = /*#__PURE__*/function () {
           });
           _context.next = 4;
           return _mercadopago["default"].preferences.create({
-            items: req.body.items,
+            items: req.body.itemsPayment,
             payer: {
               email: req.body.email
             },
@@ -68,7 +68,7 @@ var processPayment = exports.processPayment = /*#__PURE__*/function () {
 }();
 var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
   var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(req, res) {
-    var payment, data, statusPayment, dataOrder, order;
+    var payment, data, statusPayment, dataOrder, order, dataEmail;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
@@ -76,15 +76,15 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
           console.log("req.body 36", req.body);
           _context2.prev = 2;
           if (!(payment.type === "payment")) {
-            _context2.next = 15;
+            _context2.next = 17;
             break;
           }
           _context2.next = 6;
           return _mercadopago["default"].payment.findById(payment.data.id);
         case 6:
           data = _context2.sent;
+          console.log("data 41", data.body);
           statusPayment = data.body.status;
-          console.log("data 41", data);
           dataOrder = _objectSpread(_objectSpread({}, data.body.metadata), {}, {
             paymentId: payment.data.id,
             paymentStatus: statusPayment === "approved" ? _orderConstants.PAYMENT_STATUS.PAYMENT_CONFIRMED.id : _orderConstants.PAYMENT_STATUS.PAYMENT_REJECTED.id
@@ -94,25 +94,30 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
           _context2.next = 14;
           return order.save();
         case 14:
+          dataEmail = {
+            email: data.body.metadata.email,
+            description: statusPayment === "approved" ? "Su pago ha sido exitoso" : "Su pago fue rechazado"
+          };
+          (0, _sentEmails.sendEmail)(dataEmail);
           return _context2.abrupt("return", res.status(200).json({
             status: "success"
           }));
-        case 15:
-          _context2.next = 21;
-          break;
         case 17:
-          _context2.prev = 17;
+          _context2.next = 23;
+          break;
+        case 19:
+          _context2.prev = 19;
           _context2.t0 = _context2["catch"](2);
           console.error("Error processing webhook:", _context2.t0);
           return _context2.abrupt("return", res.status(500).json({
             error: "Error processing webhook",
             details: _context2.t0.message
           }));
-        case 21:
+        case 23:
         case "end":
           return _context2.stop();
       }
-    }, _callee2, null, [[2, 17]]);
+    }, _callee2, null, [[2, 19]]);
   }));
   return function receiveWebhook(_x3, _x4) {
     return _ref2.apply(this, arguments);

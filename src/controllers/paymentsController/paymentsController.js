@@ -10,7 +10,7 @@ export const processPayment = async (req, res) => {
     });
 
     const result = await mercadopago.preferences.create({
-      items: req.body.items,
+      items: req.body.itemsPayment,
       payer: {
         email: req.body.email,
       },
@@ -38,8 +38,9 @@ export const receiveWebhook = async (req, res) => {
   try {
     if (payment.type === "payment") {
       const data = await mercadopago.payment.findById(payment.data.id);
+      console.log("data 41", data.body);
+
       const statusPayment = data.body.status;
-      console.log("data 41", data);
 
       const dataOrder = {
         ...data.body.metadata,
@@ -53,8 +54,18 @@ export const receiveWebhook = async (req, res) => {
       console.log("dataUser", dataOrder);
 
       const order = new Order(dataOrder);
-
       await order.save();
+
+      const dataEmail = {
+        email: data.body.metadata.email,
+        description:
+          statusPayment === "approved"
+            ? "Su pago ha sido exitoso"
+            : "Su pago fue rechazado",
+      };
+
+      sendEmail(dataEmail);
+
       return res.status(200).json({ status: "success" });
     }
   } catch (error) {
