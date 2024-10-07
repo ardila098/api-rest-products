@@ -63,7 +63,7 @@ var orderSchema = new _mongoose.Schema({
       ref: "Product",
       required: true
     },
-    totalPrice: {
+    total_price: {
       type: Number,
       required: true,
       min: 0

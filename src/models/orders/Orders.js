@@ -29,7 +29,7 @@ const orderSchema = new Schema({
       ref: "Product",
       required: true,
     },
-    totalPrice: { type: Number, required: true, min: 0 },
+    total_price: { type: Number, required: true, min: 0 },
     count: { type: Number, required: true, min: 1 },
     imgs: [{ type: Schema.Types.Mixed }],
     selectedPieces: [{
