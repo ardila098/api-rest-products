@@ -32,7 +32,7 @@ var processPayment = exports.processPayment = /*#__PURE__*/function () {
           return _mercadopago["default"].preferences.create({
             items: req.body.itemsPayment,
             payer: {
-              email: 'ardilajr098@gmail.com'
+              email: req.body.email
             },
             back_urls: {
               success: "".concat(process.env.API_BASE_URL, "/payment/success"),

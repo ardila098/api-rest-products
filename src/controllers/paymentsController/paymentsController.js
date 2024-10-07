@@ -12,7 +12,7 @@ export const processPayment = async (req, res) => {
     const result = await mercadopago.preferences.create({
       items: req.body.itemsPayment,
       payer: {
-        email: 'ardilajr098@gmail.com',
+        email: req.body.email,
       },
       back_urls: {
         success: `${process.env.API_BASE_URL}/payment/success`,
