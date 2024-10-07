@@ -12,7 +12,7 @@ export const processPayment = async (req, res) => {
     const result = await mercadopago.preferences.create({
       items: req.body.itemsPayment,
       payer: {
-        email: req.body.email,
+        email: 'ardilajr098@gmail.com',
       },
       back_urls: {
         success: `${process.env.API_BASE_URL}/payment/success`,
@@ -41,6 +41,11 @@ export const receiveWebhook = async (req, res) => {
       console.log("data 41", data.body);
 
       const statusPayment = data.body.status;
+
+      const existingOrder = await Order.findOne({ paymentId: payment.data.id });
+      if (existingOrder) {
+        return res.status(200).json({ status: "already processed" });
+      }
 
       const dataOrder = {
         ...data.body.metadata,
@@ -75,6 +80,7 @@ export const receiveWebhook = async (req, res) => {
       .json({ error: "Error processing webhook", details: error.message });
   }
 };
+
 
 export const createOrder = async (req, res) => {
   try {
