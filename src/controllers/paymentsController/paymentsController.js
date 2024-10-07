@@ -9,19 +9,26 @@ export const processPayment = async (req, res) => {
       access_token: process.env.MERCADOPAGO_ACCESS_TOKEN,
     });
 
-    const result = await mercadopago.preferences.create({
-      items: req.body.itemsPayment,
-      payer: {
-        email: req.body.email,
-      },
-      back_urls: {
-        success: `${process.env.API_BASE_URL}/payment/success`,
-        failure: `${process.env.API_BASE_URL}/payment/failure`,
-        pending: `${process.env.API_BASE_URL}/payment/pending`,
-      },
-      notification_url: `${process.env.API_BASE_URL}/payment/webhook`,
-      metadata: req.body,
-    });
+    try {
+      const result = await mercadopago.preferences.create({
+        items: req.body.itemsPayment,
+        payer: {
+          email: req.body.email,
+        },
+        back_urls: {
+          success: `${process.env.API_BASE_URL}/payment/success`,
+          failure: `${process.env.API_BASE_URL}/payment/failure`,
+          pending: `${process.env.API_BASE_URL}/payment/pending`,
+        },
+        notification_url: `${process.env.API_BASE_URL}/payment/webhook`,
+        metadata: req.body,
+      });
+    
+      res.status(200).json({ init_point: result.body.init_point });
+    } catch (error) {
+      console.error("Error processing payment:", error);
+      res.status(500).json({ error: "Error processing payment", details: error.message });
+    }
 
     res.status(200).json({ init_point: result.body.init_point });
   } catch (error) {
