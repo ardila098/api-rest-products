@@ -23,17 +23,17 @@ export const processPayment = async (req, res) => {
         notification_url: `${process.env.API_BASE_URL}/payment/webhook`,
         metadata: req.body,
       });
-    
-      res.status(200).json({ init_point: result.body.init_point });
+
+      return res.status(200).json({ init_point: result.body.init_point });
     } catch (error) {
       console.error("Error processing payment:", error);
-      res.status(500).json({ error: "Error processing payment", details: error.message });
+      return res
+        .status(500)
+        .json({ error: "Error processing payment", details: error.message });
     }
-
-    res.status(200).json({ init_point: result.body.init_point });
   } catch (error) {
     console.error("Error processing payment:", error);
-    res.status(500).json({ error: "Error processing payment" });
+    return res.status(500).json({ error: "Error processing payment" });
   }
 };
 
@@ -87,7 +87,6 @@ export const receiveWebhook = async (req, res) => {
       .json({ error: "Error processing webhook", details: error.message });
   }
 };
-
 
 export const createOrder = async (req, res) => {
   try {

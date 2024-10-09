@@ -20,7 +20,7 @@ function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 var processPayment = exports.processPayment = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(req, res) {
-    var _result;
+    var result;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -44,38 +44,33 @@ var processPayment = exports.processPayment = /*#__PURE__*/function () {
             metadata: req.body
           });
         case 5:
-          _result = _context.sent;
-          res.status(200).json({
-            init_point: _result.body.init_point
-          });
-          _context.next = 13;
-          break;
+          result = _context.sent;
+          return _context.abrupt("return", res.status(200).json({
+            init_point: result.body.init_point
+          }));
         case 9:
           _context.prev = 9;
           _context.t0 = _context["catch"](2);
           console.error("Error processing payment:", _context.t0);
-          res.status(500).json({
+          return _context.abrupt("return", res.status(500).json({
             error: "Error processing payment",
             details: _context.t0.message
-          });
+          }));
         case 13:
-          res.status(200).json({
-            init_point: result.body.init_point
-          });
-          _context.next = 20;
+          _context.next = 19;
           break;
-        case 16:
-          _context.prev = 16;
+        case 15:
+          _context.prev = 15;
           _context.t1 = _context["catch"](0);
           console.error("Error processing payment:", _context.t1);
-          res.status(500).json({
+          return _context.abrupt("return", res.status(500).json({
             error: "Error processing payment"
-          });
-        case 20:
+          }));
+        case 19:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[0, 16], [2, 9]]);
+    }, _callee, null, [[0, 15], [2, 9]]);
   }));
   return function processPayment(_x, _x2) {
     return _ref.apply(this, arguments);
