@@ -66,7 +66,8 @@ export const receiveWebhook = async (req, res) => {
       console.log("dataUser", dataOrder);
 
       const order = new Order(dataOrder);
-      await order.save();
+      const dataNewOrder = await order.save();
+      console.log(dataNewOrder);
 
       const dataEmail = {
         email: data.body.metadata.email,
@@ -74,6 +75,7 @@ export const receiveWebhook = async (req, res) => {
           statusPayment === "approved"
             ? "Su pago ha sido exitoso"
             : "Su pago fue rechazado",
+        id: dataNewOrder._id,
       };
 
       sendEmail(dataEmail);

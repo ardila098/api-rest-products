@@ -31,7 +31,7 @@ var sendEmail = exports.sendEmail = /*#__PURE__*/function () {
             to: data.email,
             subject: "Verificación de compra Verona",
             text: data.description,
-            html: "<div><h1>Verificaci\xF3n de compra Verona</h1>\n    <p>".concat(data.description, "</p>\n    <p>").concat(data.id ? data.id : data._id, "</p>\n    </div>")
+            html: "<div><h1>Verificaci\xF3n de compra Verona</h1>\n    <p>".concat(data.description, "</p>\n    <div><h1>Numero de orden</h1>\n    <p>").concat(data.id, "</p>\n    </div>")
           };
           _context.prev = 3;
           _context.next = 6;

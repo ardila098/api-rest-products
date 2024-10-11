@@ -19,7 +19,8 @@ export const sendEmail = async (data) => {
     text: data.description,
     html: `<div><h1>Verificación de compra Verona</h1>
     <p>${data.description}</p>
-    <p>${data.id ? data.id : data._id}</p>
+    <div><h1>Numero de orden</h1>
+    <p>${data.id}</p>
     </div>`,
   };
 

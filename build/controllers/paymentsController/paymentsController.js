@@ -78,7 +78,7 @@ var processPayment = exports.processPayment = /*#__PURE__*/function () {
 }();
 var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
   var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(req, res) {
-    var payment, data, statusPayment, existingOrder, dataOrder, order, dataEmail;
+    var payment, data, statusPayment, existingOrder, dataOrder, order, dataNewOrder, dataEmail;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
@@ -86,7 +86,7 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
           console.log("req.body 36", req.body);
           _context2.prev = 2;
           if (!(payment.type === "payment")) {
-            _context2.next = 22;
+            _context2.next = 24;
             break;
           }
           _context2.next = 6;
@@ -118,30 +118,33 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
           _context2.next = 19;
           return order.save();
         case 19:
+          dataNewOrder = _context2.sent;
+          console.log(dataNewOrder);
           dataEmail = {
             email: data.body.metadata.email,
-            description: statusPayment === "approved" ? "Su pago ha sido exitoso" : "Su pago fue rechazado"
+            description: statusPayment === "approved" ? "Su pago ha sido exitoso" : "Su pago fue rechazado",
+            id: dataNewOrder._id
           };
           (0, _sentEmails.sendEmail)(dataEmail);
           return _context2.abrupt("return", res.status(200).json({
             status: "success"
           }));
-        case 22:
-          _context2.next = 28;
-          break;
         case 24:
-          _context2.prev = 24;
+          _context2.next = 30;
+          break;
+        case 26:
+          _context2.prev = 26;
           _context2.t0 = _context2["catch"](2);
           console.error("Error processing webhook:", _context2.t0);
           return _context2.abrupt("return", res.status(500).json({
             error: "Error processing webhook",
             details: _context2.t0.message
           }));
-        case 28:
+        case 30:
         case "end":
           return _context2.stop();
       }
-    }, _callee2, null, [[2, 24]]);
+    }, _callee2, null, [[2, 26]]);
   }));
   return function receiveWebhook(_x3, _x4) {
     return _ref2.apply(this, arguments);
