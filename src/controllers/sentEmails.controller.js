@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 
 export const sendEmail = async (data) => {
-  console.log(data)
+  console.log(data);
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
@@ -17,7 +17,10 @@ export const sendEmail = async (data) => {
     to: data.email,
     subject: "Verificación de compra Verona",
     text: data.description,
-    html: `<div><h1>Verificación de compra Verona</h1><p>${data.description}</p></div>`,
+    html: `<div><h1>Verificación de compra Verona</h1>
+    <p>${data.description}</p>
+    <p>${data.id ? data.id : data._id}</p>
+    </div>`,
   };
 
   try {
