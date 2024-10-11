@@ -13,4 +13,5 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default":
 var router = _express["default"].Router();
 router.post("/", ordersCrtl.createOrder);
 router.get("/", ordersCrtl.getOrders);
+router.get("/:orderId", ordersCrtl.getOrder);
 var _default = exports["default"] = router;

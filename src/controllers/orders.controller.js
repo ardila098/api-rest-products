@@ -2,7 +2,6 @@ import Order from "../models/orders/Orders";
 
 export const createOrder = async (req, res) => {
   console.log(req.body);
-
   const newOrder = new Order(req.body);
 
   try {
@@ -17,6 +16,20 @@ export const createOrder = async (req, res) => {
 export const getOrders = async (req, res) => {
   const data = await Order.find();
   res.json(data);
+};
 
+export const getOrder = async (req, res) => {
+  const { orderId } = req.params;
+  console.log(orderId);
 
+  try {
+    const data = await Order.findById(orderId);
+    if (!data) {
+      return res.status(404).json({ error: "Orden no encontrada" });
+    }
+    res.json(data);
+  } catch (error) {
+    console.error("Error fetching order:", error);
+    res.status(500).json({ error: "Error fetching order" });
+  }
 };

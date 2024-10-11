@@ -4,7 +4,7 @@ const router = express.Router();
 import * as ordersCrtl from "../controllers/orders.controller";
 
 router.post("/", ordersCrtl.createOrder);
-
 router.get("/", ordersCrtl.getOrders);
+router.get("/:orderId", ordersCrtl.getOrder);
 
 export default router;
