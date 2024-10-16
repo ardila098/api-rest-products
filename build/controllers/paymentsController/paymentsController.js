@@ -86,7 +86,7 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
           console.log("req.body 36", req.body);
           _context2.prev = 2;
           if (!(payment.type === "payment")) {
-            _context2.next = 24;
+            _context2.next = 25;
             break;
           }
           _context2.next = 6;
@@ -109,16 +109,17 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
             status: "already processed"
           }));
         case 14:
+          console.log(data.body.metadata.items);
           dataOrder = _objectSpread(_objectSpread({}, data.body.metadata), {}, {
             paymentId: payment.data.id,
             paymentStatus: statusPayment === "approved" ? _orderConstants.PAYMENT_STATUS.PAYMENT_CONFIRMED.id : _orderConstants.PAYMENT_STATUS.PAYMENT_REJECTED.id,
             sendStatus: statusPayment === "approved" ? _orderConstants.SHIPPING_STATUS.PENDING_SEND.id : _orderConstants.SHIPPING_STATUS.REJECTED.id
           });
-          console.log("dataUser", dataOrder);
+          console.log("dataUser 30", dataOrder);
           order = new _Orders["default"](dataOrder);
-          _context2.next = 19;
+          _context2.next = 20;
           return order.save();
-        case 19:
+        case 20:
           dataNewOrder = _context2.sent;
           console.log(dataNewOrder);
           dataEmail = {
@@ -130,22 +131,22 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
           return _context2.abrupt("return", res.status(200).json({
             status: "success"
           }));
-        case 24:
-          _context2.next = 30;
+        case 25:
+          _context2.next = 31;
           break;
-        case 26:
-          _context2.prev = 26;
+        case 27:
+          _context2.prev = 27;
           _context2.t0 = _context2["catch"](2);
           console.error("Error processing webhook:", _context2.t0);
           return _context2.abrupt("return", res.status(500).json({
             error: "Error processing webhook",
             details: _context2.t0.message
           }));
-        case 30:
+        case 31:
         case "end":
           return _context2.stop();
       }
-    }, _callee2, null, [[2, 26]]);
+    }, _callee2, null, [[2, 27]]);
   }));
   return function receiveWebhook(_x3, _x4) {
     return _ref2.apply(this, arguments);

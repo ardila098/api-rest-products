@@ -76,6 +76,8 @@ var orderSchema = new _mongoose.Schema({
     imgs: [{
       type: _mongoose.Schema.Types.Mixed
     }],
+    name: String,
+    price: String,
     selectedPieces: [{
       pieceId: String,
       namePiece: String,

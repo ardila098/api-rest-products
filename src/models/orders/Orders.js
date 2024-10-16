@@ -32,6 +32,8 @@ const orderSchema = new Schema({
     total_price: { type: Number, required: true, min: 0 },
     count: { type: Number, required: true, min: 1 },
     imgs: [{ type: Schema.Types.Mixed }],
+    name:String,
+    price:String,
     selectedPieces: [{
       pieceId: String,
       namePiece: String,

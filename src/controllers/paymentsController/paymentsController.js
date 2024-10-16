@@ -57,6 +57,7 @@ export const receiveWebhook = async (req, res) => {
         return res.status(200).json({ status: "already processed" });
       }
 
+      console.log(data.body.metadata.items);
       const dataOrder = {
         ...data.body.metadata,
         paymentId: payment.data.id,
@@ -70,7 +71,7 @@ export const receiveWebhook = async (req, res) => {
             : SHIPPING_STATUS.REJECTED.id,
       };
 
-      console.log("dataUser", dataOrder);
+      console.log("dataUser 30", dataOrder);
 
       const order = new Order(dataOrder);
       const dataNewOrder = await order.save();
