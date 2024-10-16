@@ -78,7 +78,7 @@ var orderSchema = new _mongoose.Schema({
     }],
     name: String,
     price: String,
-    selectedPieces: [{
+    selected_pieces: [{
       pieceId: String,
       namePiece: String,
       nameSize: String,

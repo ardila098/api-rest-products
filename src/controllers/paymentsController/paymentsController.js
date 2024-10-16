@@ -57,7 +57,7 @@ export const receiveWebhook = async (req, res) => {
         return res.status(200).json({ status: "already processed" });
       }
 
-      console.log(data.body.metadata.items);
+      console.log('data pieces ', data.body.metadata.items.selected_pieces);
       const dataOrder = {
         ...data.body.metadata,
         paymentId: payment.data.id,

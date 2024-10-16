@@ -109,7 +109,7 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
             status: "already processed"
           }));
         case 14:
-          console.log(data.body.metadata.items);
+          console.log('data pieces ', data.body.metadata.items.selected_pieces);
           dataOrder = _objectSpread(_objectSpread({}, data.body.metadata), {}, {
             paymentId: payment.data.id,
             paymentStatus: statusPayment === "approved" ? _orderConstants.PAYMENT_STATUS.PAYMENT_CONFIRMED.id : _orderConstants.PAYMENT_STATUS.PAYMENT_REJECTED.id,

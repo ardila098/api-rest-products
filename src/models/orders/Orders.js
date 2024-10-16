@@ -34,7 +34,7 @@ const orderSchema = new Schema({
     imgs: [{ type: Schema.Types.Mixed }],
     name:String,
     price:String,
-    selectedPieces: [{
+    selected_pieces: [{
       pieceId: String,
       namePiece: String,
       nameSize: String,
