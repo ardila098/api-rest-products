@@ -1,7 +1,10 @@
 import mercadopago from "mercadopago";
 import Order from "../../models/orders/Orders";
 import { sendEmail } from "../sentEmails.controller";
-import { PAYMENT_STATUS } from "../../constants/orderConstants";
+import {
+  PAYMENT_STATUS,
+  SHIPPING_STATUS,
+} from "../../constants/orderConstants";
 
 export const processPayment = async (req, res) => {
   try {
@@ -61,6 +64,10 @@ export const receiveWebhook = async (req, res) => {
           statusPayment === "approved"
             ? PAYMENT_STATUS.PAYMENT_CONFIRMED.id
             : PAYMENT_STATUS.PAYMENT_REJECTED.id,
+        sendStatus:
+          statusPayment === "approved"
+            ? SHIPPING_STATUS.PENDING_SEND.id
+            : SHIPPING_STATUS.REJECTED.id,
       };
 
       console.log("dataUser", dataOrder);

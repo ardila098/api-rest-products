@@ -111,7 +111,8 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
         case 14:
           dataOrder = _objectSpread(_objectSpread({}, data.body.metadata), {}, {
             paymentId: payment.data.id,
-            paymentStatus: statusPayment === "approved" ? _orderConstants.PAYMENT_STATUS.PAYMENT_CONFIRMED.id : _orderConstants.PAYMENT_STATUS.PAYMENT_REJECTED.id
+            paymentStatus: statusPayment === "approved" ? _orderConstants.PAYMENT_STATUS.PAYMENT_CONFIRMED.id : _orderConstants.PAYMENT_STATUS.PAYMENT_REJECTED.id,
+            sendStatus: statusPayment === "approved" ? _orderConstants.SHIPPING_STATUS.PENDING_SEND.id : _orderConstants.SHIPPING_STATUS.REJECTED.id
           });
           console.log("dataUser", dataOrder);
           order = new _Orders["default"](dataOrder);

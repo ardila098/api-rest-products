@@ -21,10 +21,22 @@ var PAYMENT_STATUS = exports.PAYMENT_STATUS = {
 var SHIPPING_STATUS = exports.SHIPPING_STATUS = {
   PENDING_SEND: {
     id: 1,
-    label: "Pendiente de Envío"
+    label: "listando pedido"
   },
   SENT: {
     id: 2,
     label: "Envío Realizado"
+  },
+  DELIVERED: {
+    id: 3,
+    label: "Entregado"
+  },
+  NOT_RECEIVED: {
+    id: 4,
+    label: "No Recibido"
+  },
+  REJECTED: {
+    id: 5,
+    label: "Rechazado"
   }
 };

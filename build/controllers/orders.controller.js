@@ -70,37 +70,38 @@ var updateOrder = exports.updateOrder = /*#__PURE__*/function () {
     return _regeneratorRuntime().wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
-          id = req.params.id;
-          _context3.prev = 1;
-          _context3.next = 4;
+          id = req.params.orderId;
+          console.log(req.params);
+          _context3.prev = 2;
+          _context3.next = 5;
           return _Orders["default"].findByIdAndUpdate(id, req.body, {
             "new": true
           });
-        case 4:
+        case 5:
           updatedOrder = _context3.sent;
           if (updatedOrder) {
-            _context3.next = 7;
+            _context3.next = 8;
             break;
           }
           return _context3.abrupt("return", res.status(404).json({
             error: "Order not found"
           }));
-        case 7:
+        case 8:
           res.status(200).json(updatedOrder);
-          _context3.next = 14;
+          _context3.next = 15;
           break;
-        case 10:
-          _context3.prev = 10;
-          _context3.t0 = _context3["catch"](1);
+        case 11:
+          _context3.prev = 11;
+          _context3.t0 = _context3["catch"](2);
           console.error("Error updating order:", _context3.t0);
           res.status(500).json({
             error: "Error updating order"
           });
-        case 14:
+        case 15:
         case "end":
           return _context3.stop();
       }
-    }, _callee3, null, [[1, 10]]);
+    }, _callee3, null, [[2, 11]]);
   }));
   return function updateOrder(_x5, _x6) {
     return _ref3.apply(this, arguments);

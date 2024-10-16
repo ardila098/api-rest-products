@@ -13,20 +13,19 @@ export const createOrder = async (req, res) => {
   }
 };
 
-
-
-
 export const getOrders = async (req, res) => {
   const data = await Order.find();
   res.json(data);
 };
 
-
 export const updateOrder = async (req, res) => {
-  const { id } = req.params;
+  const id = req.params.orderId;
 
+  console.log(req.params);
   try {
-    const updatedOrder = await Order.findByIdAndUpdate(id, req.body, { new: true });
+    const updatedOrder = await Order.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
     if (!updatedOrder) {
       return res.status(404).json({ error: "Order not found" });
     }
