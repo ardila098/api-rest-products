@@ -78,7 +78,7 @@ var processPayment = exports.processPayment = /*#__PURE__*/function () {
 }();
 var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
   var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(req, res) {
-    var payment, _data$body$metadata$i, _data$body$metadata$i2, _data$body$metadata$i3, data, statusPayment, existingOrder, dataOrder, order, dataNewOrder, dataEmail;
+    var payment, _data$body$metadata$i, _data$body$metadata$i2, data, statusPayment, existingOrder, dataOrder, order, dataNewOrder, dataEmail;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
@@ -109,9 +109,9 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
           }));
         case 13:
           console.log('data pieces ', data.body.metadata.items);
-          console.log('name piece ', (_data$body$metadata$i = data.body.metadata.items.selected_pieces) === null || _data$body$metadata$i === void 0 ? void 0 : _data$body$metadata$i.namePiece);
-          console.log('name piece ', (_data$body$metadata$i2 = data.body.metadata.items.selected_pieces) === null || _data$body$metadata$i2 === void 0 ? void 0 : _data$body$metadata$i2.name_size);
-          console.log('name piece ', (_data$body$metadata$i3 = data.body.metadata.items.selected_pieces) === null || _data$body$metadata$i3 === void 0 ? void 0 : _data$body$metadata$i3.size_id);
+          console.log('name piece ', data.body.metadata.items.selected_pieces);
+          console.log('name piece ', (_data$body$metadata$i = data.body.metadata.items.selected_pieces) === null || _data$body$metadata$i === void 0 ? void 0 : _data$body$metadata$i.name_size);
+          console.log('name piece ', (_data$body$metadata$i2 = data.body.metadata.items.selected_pieces) === null || _data$body$metadata$i2 === void 0 ? void 0 : _data$body$metadata$i2.size_id);
           dataOrder = _objectSpread(_objectSpread({}, data.body.metadata), {}, {
             paymentId: payment.data.id,
             paymentStatus: statusPayment === "approved" ? _orderConstants.PAYMENT_STATUS.PAYMENT_CONFIRMED.id : _orderConstants.PAYMENT_STATUS.PAYMENT_REJECTED.id,
