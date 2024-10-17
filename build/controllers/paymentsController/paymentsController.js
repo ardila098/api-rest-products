@@ -108,8 +108,8 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
             status: "already processed"
           }));
         case 13:
-          console.log('data pieces ', data.body.metadata.items.selected_pieces);
-          console.log('name piece ', (_data$body$metadata$i = data.body.metadata.items.selected_pieces) === null || _data$body$metadata$i === void 0 ? void 0 : _data$body$metadata$i.name_piece);
+          console.log('data pieces ', data.body.metadata.items);
+          console.log('name piece ', (_data$body$metadata$i = data.body.metadata.items.selected_pieces) === null || _data$body$metadata$i === void 0 ? void 0 : _data$body$metadata$i.namePiece);
           console.log('name piece ', (_data$body$metadata$i2 = data.body.metadata.items.selected_pieces) === null || _data$body$metadata$i2 === void 0 ? void 0 : _data$body$metadata$i2.name_size);
           console.log('name piece ', (_data$body$metadata$i3 = data.body.metadata.items.selected_pieces) === null || _data$body$metadata$i3 === void 0 ? void 0 : _data$body$metadata$i3.size_id);
           dataOrder = _objectSpread(_objectSpread({}, data.body.metadata), {}, {
