@@ -20,7 +20,7 @@ function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 var processPayment = exports.processPayment = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(req, res) {
-    var result;
+    var _req$body$items, _req$body$items2, result;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -28,8 +28,10 @@ var processPayment = exports.processPayment = /*#__PURE__*/function () {
           _mercadopago["default"].configure({
             access_token: process.env.MERCADOPAGO_ACCESS_TOKEN
           });
-          _context.prev = 2;
-          _context.next = 5;
+          console.log((_req$body$items = req.body.items) === null || _req$body$items === void 0 ? void 0 : _req$body$items.selectedPieces);
+          console.log('selected_', (_req$body$items2 = req.body.items) === null || _req$body$items2 === void 0 ? void 0 : _req$body$items2.selected_pieces);
+          _context.prev = 4;
+          _context.next = 7;
           return _mercadopago["default"].preferences.create({
             items: req.body.itemsPayment,
             payer: {
@@ -43,34 +45,34 @@ var processPayment = exports.processPayment = /*#__PURE__*/function () {
             notification_url: "".concat(process.env.API_BASE_URL, "/payment/webhook"),
             metadata: req.body
           });
-        case 5:
+        case 7:
           result = _context.sent;
           return _context.abrupt("return", res.status(200).json({
             init_point: result.body.init_point
           }));
-        case 9:
-          _context.prev = 9;
-          _context.t0 = _context["catch"](2);
+        case 11:
+          _context.prev = 11;
+          _context.t0 = _context["catch"](4);
           console.error("Error processing payment:", _context.t0);
           return _context.abrupt("return", res.status(500).json({
             error: "Error processing payment",
             details: _context.t0.message
           }));
-        case 13:
-          _context.next = 19;
-          break;
         case 15:
-          _context.prev = 15;
+          _context.next = 21;
+          break;
+        case 17:
+          _context.prev = 17;
           _context.t1 = _context["catch"](0);
           console.error("Error processing payment:", _context.t1);
           return _context.abrupt("return", res.status(500).json({
             error: "Error processing payment"
           }));
-        case 19:
+        case 21:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[0, 15], [2, 9]]);
+    }, _callee, null, [[0, 17], [4, 11]]);
   }));
   return function processPayment(_x, _x2) {
     return _ref.apply(this, arguments);
@@ -78,14 +80,14 @@ var processPayment = exports.processPayment = /*#__PURE__*/function () {
 }();
 var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
   var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(req, res) {
-    var payment, _data$body$metadata$i, _data$body$metadata$i2, _data$body$metadata$i3, data, statusPayment, existingOrder, dataOrder, order, dataNewOrder, dataEmail;
+    var payment, data, statusPayment, existingOrder, dataOrder, order, dataNewOrder, dataEmail;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
           payment = req.body; // console.log("req.body 36", req.body);
           _context2.prev = 1;
           if (!(payment.type === "payment")) {
-            _context2.next = 26;
+            _context2.next = 22;
             break;
           }
           _context2.next = 5;
@@ -108,19 +110,15 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
             status: "already processed"
           }));
         case 13:
-          console.log('data pieces ', (_data$body$metadata$i = data.body.metadata.items) === null || _data$body$metadata$i === void 0 ? void 0 : _data$body$metadata$i.selected_pieces);
-          console.log('name piece ', data.body.metadata.items.selected_pieces);
-          console.log('name piece ', (_data$body$metadata$i2 = data.body.metadata.items.selected_pieces) === null || _data$body$metadata$i2 === void 0 ? void 0 : _data$body$metadata$i2.name_size);
-          console.log('name piece ', (_data$body$metadata$i3 = data.body.metadata.items.selected_pieces) === null || _data$body$metadata$i3 === void 0 ? void 0 : _data$body$metadata$i3.size_id);
           dataOrder = _objectSpread(_objectSpread({}, data.body.metadata), {}, {
             paymentId: payment.data.id,
             paymentStatus: statusPayment === "approved" ? _orderConstants.PAYMENT_STATUS.PAYMENT_CONFIRMED.id : _orderConstants.PAYMENT_STATUS.PAYMENT_REJECTED.id,
             sendStatus: statusPayment === "approved" ? _orderConstants.SHIPPING_STATUS.PENDING_SEND.id : _orderConstants.SHIPPING_STATUS.REJECTED.id
           }); // console.log("dataUser 30", dataOrder);
           order = new _Orders["default"](dataOrder);
-          _context2.next = 21;
+          _context2.next = 17;
           return order.save();
-        case 21:
+        case 17:
           dataNewOrder = _context2.sent;
           console.log(dataNewOrder);
           dataEmail = {
@@ -132,22 +130,22 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
           return _context2.abrupt("return", res.status(200).json({
             status: "success"
           }));
-        case 26:
-          _context2.next = 32;
+        case 22:
+          _context2.next = 28;
           break;
-        case 28:
-          _context2.prev = 28;
+        case 24:
+          _context2.prev = 24;
           _context2.t0 = _context2["catch"](1);
           console.error("Error processing webhook:", _context2.t0);
           return _context2.abrupt("return", res.status(500).json({
             error: "Error processing webhook",
             details: _context2.t0.message
           }));
-        case 32:
+        case 28:
         case "end":
           return _context2.stop();
       }
-    }, _callee2, null, [[1, 28]]);
+    }, _callee2, null, [[1, 24]]);
   }));
   return function receiveWebhook(_x3, _x4) {
     return _ref2.apply(this, arguments);
