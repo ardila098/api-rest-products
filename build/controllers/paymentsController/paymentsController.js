@@ -20,7 +20,7 @@ function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 var processPayment = exports.processPayment = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(req, res) {
-    var _req$body$items, _req$body$items2, result;
+    var result;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -28,10 +28,9 @@ var processPayment = exports.processPayment = /*#__PURE__*/function () {
           _mercadopago["default"].configure({
             access_token: process.env.MERCADOPAGO_ACCESS_TOKEN
           });
-          console.log((_req$body$items = req.body.items) === null || _req$body$items === void 0 ? void 0 : _req$body$items.selectedPieces);
-          console.log('selected_', (_req$body$items2 = req.body.items) === null || _req$body$items2 === void 0 ? void 0 : _req$body$items2.selected_pieces);
-          _context.prev = 4;
-          _context.next = 7;
+          console.log('selected_', req.body);
+          _context.prev = 3;
+          _context.next = 6;
           return _mercadopago["default"].preferences.create({
             items: req.body.itemsPayment,
             payer: {
@@ -45,34 +44,34 @@ var processPayment = exports.processPayment = /*#__PURE__*/function () {
             notification_url: "".concat(process.env.API_BASE_URL, "/payment/webhook"),
             metadata: req.body
           });
-        case 7:
+        case 6:
           result = _context.sent;
           return _context.abrupt("return", res.status(200).json({
             init_point: result.body.init_point
           }));
-        case 11:
-          _context.prev = 11;
-          _context.t0 = _context["catch"](4);
+        case 10:
+          _context.prev = 10;
+          _context.t0 = _context["catch"](3);
           console.error("Error processing payment:", _context.t0);
           return _context.abrupt("return", res.status(500).json({
             error: "Error processing payment",
             details: _context.t0.message
           }));
-        case 15:
-          _context.next = 21;
+        case 14:
+          _context.next = 20;
           break;
-        case 17:
-          _context.prev = 17;
+        case 16:
+          _context.prev = 16;
           _context.t1 = _context["catch"](0);
           console.error("Error processing payment:", _context.t1);
           return _context.abrupt("return", res.status(500).json({
             error: "Error processing payment"
           }));
-        case 21:
+        case 20:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[0, 17], [4, 11]]);
+    }, _callee, null, [[0, 16], [3, 10]]);
   }));
   return function processPayment(_x, _x2) {
     return _ref.apply(this, arguments);

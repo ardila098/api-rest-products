@@ -13,8 +13,7 @@ export const processPayment = async (req, res) => {
     });
 
 
-    console.log(req.body.items?.selectedPieces)
-    console.log('selected_', req.body.items?.selected_pieces)
+    console.log('selected_', req.body)
 
 
     try {
