@@ -82,44 +82,43 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
-          payment = req.body;
-          console.log("req.body 36", req.body);
-          _context2.prev = 2;
+          payment = req.body; // console.log("req.body 36", req.body);
+          _context2.prev = 1;
           if (!(payment.type === "payment")) {
-            _context2.next = 25;
+            _context2.next = 23;
             break;
           }
-          _context2.next = 6;
+          _context2.next = 5;
           return _mercadopago["default"].payment.findById(payment.data.id);
-        case 6:
+        case 5:
           data = _context2.sent;
-          console.log("data 41", data.body);
+          // console.log("data 41", data.body);
           statusPayment = data.body.status;
-          _context2.next = 11;
+          _context2.next = 9;
           return _Orders["default"].findOne({
             paymentId: payment.data.id
           });
-        case 11:
+        case 9:
           existingOrder = _context2.sent;
           if (!existingOrder) {
-            _context2.next = 14;
+            _context2.next = 12;
             break;
           }
           return _context2.abrupt("return", res.status(200).json({
             status: "already processed"
           }));
-        case 14:
+        case 12:
           console.log('data pieces ', data.body.metadata.items.selected_pieces);
+          console.log('data pieces ', data.body.metadata.items.selected_pieces.name_piece);
           dataOrder = _objectSpread(_objectSpread({}, data.body.metadata), {}, {
             paymentId: payment.data.id,
             paymentStatus: statusPayment === "approved" ? _orderConstants.PAYMENT_STATUS.PAYMENT_CONFIRMED.id : _orderConstants.PAYMENT_STATUS.PAYMENT_REJECTED.id,
             sendStatus: statusPayment === "approved" ? _orderConstants.SHIPPING_STATUS.PENDING_SEND.id : _orderConstants.SHIPPING_STATUS.REJECTED.id
-          });
-          console.log("dataUser 30", dataOrder);
+          }); // console.log("dataUser 30", dataOrder);
           order = new _Orders["default"](dataOrder);
-          _context2.next = 20;
+          _context2.next = 18;
           return order.save();
-        case 20:
+        case 18:
           dataNewOrder = _context2.sent;
           console.log(dataNewOrder);
           dataEmail = {
@@ -131,22 +130,22 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
           return _context2.abrupt("return", res.status(200).json({
             status: "success"
           }));
-        case 25:
-          _context2.next = 31;
+        case 23:
+          _context2.next = 29;
           break;
-        case 27:
-          _context2.prev = 27;
-          _context2.t0 = _context2["catch"](2);
+        case 25:
+          _context2.prev = 25;
+          _context2.t0 = _context2["catch"](1);
           console.error("Error processing webhook:", _context2.t0);
           return _context2.abrupt("return", res.status(500).json({
             error: "Error processing webhook",
             details: _context2.t0.message
           }));
-        case 31:
+        case 29:
         case "end":
           return _context2.stop();
       }
-    }, _callee2, null, [[2, 27]]);
+    }, _callee2, null, [[1, 25]]);
   }));
   return function receiveWebhook(_x3, _x4) {
     return _ref2.apply(this, arguments);
