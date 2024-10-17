@@ -43,7 +43,7 @@ export const processPayment = async (req, res) => {
 export const receiveWebhook = async (req, res) => {
   const payment = req.body;
 
-  console.log("req.body 36", req.body);
+  // console.log("req.body 36", req.body);
 
   try {
     if (payment.type === "payment") {
@@ -58,6 +58,15 @@ export const receiveWebhook = async (req, res) => {
       }
 
       console.log('data pieces ', data.body.metadata.items.selected_pieces);
+      console.log('name piece ', data.body.metadata.items.selected_pieces?.name_piece);
+      console.log('name piece ', data.body.metadata.items.selected_pieces?.name_size);
+      console.log('name piece ', data.body.metadata.items.selected_pieces?.size_id);
+
+
+      
+
+
+
       const dataOrder = {
         ...data.body.metadata,
         paymentId: payment.data.id,
@@ -71,7 +80,7 @@ export const receiveWebhook = async (req, res) => {
             : SHIPPING_STATUS.REJECTED.id,
       };
 
-      console.log("dataUser 30", dataOrder);
+      // console.log("dataUser 30", dataOrder);
 
       const order = new Order(dataOrder);
       const dataNewOrder = await order.save();
