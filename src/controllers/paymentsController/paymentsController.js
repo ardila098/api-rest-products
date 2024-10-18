@@ -12,9 +12,7 @@ export const processPayment = async (req, res) => {
       access_token: process.env.MERCADOPAGO_ACCESS_TOKEN,
     });
 
-
-    console.log('selected_', req.body)
-
+    console.log("selected_", req.body);
 
     try {
       const result = await mercadopago.preferences.create({
@@ -47,12 +45,11 @@ export const processPayment = async (req, res) => {
 export const receiveWebhook = async (req, res) => {
   const payment = req.body;
 
-  // console.log("req.body 36", req.body);
+  console.log("PAYMENT , RE.BODY 36", req.body);
 
   try {
     if (payment.type === "payment") {
       const data = await mercadopago.payment.findById(payment.data.id);
-      console.log("data 41", data.body);
 
       const statusPayment = data.body.status;
 
@@ -60,13 +57,6 @@ export const receiveWebhook = async (req, res) => {
       if (existingOrder) {
         return res.status(200).json({ status: "already processed" });
       }
-
-  
-
-
-      
-
-
 
       const dataOrder = {
         ...data.body.metadata,
