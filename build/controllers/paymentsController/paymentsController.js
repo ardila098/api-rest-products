@@ -28,7 +28,7 @@ var processPayment = exports.processPayment = /*#__PURE__*/function () {
           _mercadopago["default"].configure({
             access_token: process.env.MERCADOPAGO_ACCESS_TOKEN
           });
-          console.log('selected_', req.body);
+          console.log("selected_", req.body);
           _context.prev = 3;
           _context.next = 6;
           return _mercadopago["default"].preferences.create({
@@ -83,17 +83,17 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
-          payment = req.body; // console.log("req.body 36", req.body);
-          _context2.prev = 1;
+          payment = req.body;
+          console.log("PAYMENT , RE.BODY 36", req.body);
+          _context2.prev = 2;
           if (!(payment.type === "payment")) {
             _context2.next = 22;
             break;
           }
-          _context2.next = 5;
+          _context2.next = 6;
           return _mercadopago["default"].payment.findById(payment.data.id);
-        case 5:
+        case 6:
           data = _context2.sent;
-          console.log("data 41", data.body);
           statusPayment = data.body.status;
           _context2.next = 10;
           return _Orders["default"].findOne({
@@ -134,7 +134,7 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
           break;
         case 24:
           _context2.prev = 24;
-          _context2.t0 = _context2["catch"](1);
+          _context2.t0 = _context2["catch"](2);
           console.error("Error processing webhook:", _context2.t0);
           return _context2.abrupt("return", res.status(500).json({
             error: "Error processing webhook",
@@ -144,7 +144,7 @@ var receiveWebhook = exports.receiveWebhook = /*#__PURE__*/function () {
         case "end":
           return _context2.stop();
       }
-    }, _callee2, null, [[1, 24]]);
+    }, _callee2, null, [[2, 24]]);
   }));
   return function receiveWebhook(_x3, _x4) {
     return _ref2.apply(this, arguments);
