@@ -35,10 +35,10 @@ const orderSchema = new Schema({
     name:String,
     price:String,
     selected_pieces: [{
-      pieceId: String,
-      namePiece: String,
-      nameSize: String,
-      sizeId: String,
+      piece_id: String,
+      name_piece: String,
+      name_size: String,
+      size_id: String,
     }],
   }],
   paymentStatus: {
